@@ -1,0 +1,55 @@
+SELECT CEIL( SUM( tt.sentiment_ranking ) )
+FROM twitter_tweets tt
+INNER JOIN trends_movies_tweets tmt ON tt.id = tmt.tweet_id
+WHERE tmt.movie_id =94
+AND sentiment_ranking < 0.2
+AND date_tweeted > DATE_SUB( CURDATE( ) , INTERVAL 10
+DAY )
+LIMIT 0 , 30
+
+- 788
+
+
+SELECT COUNT(tt.id)
+FROM twitter_tweets tt 
+INNER JOIN trends_movies_tweets tmt 
+ON tt.id = tmt.tweet_id 
+WHERE tmt.movie_id = 94 
+AND sentiment_ranking < 0.2
+AND date_tweeted > DATE_SUB(CURDATE(), INTERVAL 10 DAY)
+
+- 77937
+
+
+SELECT CEIL( SUM( tt.sentiment_ranking ) )
+FROM twitter_tweets tt
+INNER JOIN trends_movies_tweets tmt ON tt.id = tmt.tweet_id
+WHERE tmt.movie_id =94
+AND sentiment_ranking > 0.65
+AND date_tweeted > DATE_SUB( CURDATE( ) , INTERVAL 10
+DAY )
+LIMIT 0 , 30
+
+- 1014 
+
+
+SELECT COUNT(tt.id)
+FROM twitter_tweets tt 
+INNER JOIN trends_movies_tweets tmt 
+ON tt.id = tmt.tweet_id 
+WHERE tmt.movie_id = 94 
+AND sentiment_ranking > 0.65
+AND date_tweeted > DATE_SUB(CURDATE(), INTERVAL 10 DAY)
+
+- 1148
+
+
+SELECT COUNT(tt.id)
+FROM twitter_tweets tt 
+INNER JOIN trends_movies_tweets tmt 
+ON tt.id = tmt.tweet_id 
+WHERE tmt.movie_id = 94 
+AND date_tweeted > DATE_SUB(CURDATE(), INTERVAL 10 DAY)
+
+- 82847
+

@@ -1,0 +1,66 @@
+                                                                                                                                                                                                                                                               
+Delivered-To: daniel.shiffman@gmail.com
+Received: by 10.82.105.10 with SMTP id d10cs851587buc;
+        Thu, 18 Jan 2007 17:51:15 -0800 (PST)
+Received: by 10.65.219.6 with SMTP id w6mr2040312qbq.1169171474751;
+        Thu, 18 Jan 2007 17:51:14 -0800 (PST)
+Return-Path: <1-208237-shiffman.net?daniel@mx27.sitecartooncodes.com>
+Received: from looneymail-mx3.dreamhost.com (sd-green-bigip-119.dreamhost.com [208.97.132.119])
+        by mx.google.com with ESMTP id f13si1797058qba.2007.01.18.17.51.13;
+        Thu, 18 Jan 2007 17:51:14 -0800 (PST)
+Received-SPF: neutral (google.com: 208.97.132.119 is neither permitted nor denied by best guess record for domain of 1-208237-shiffman.net?daniel@mx27.sitecartooncodes.com)
+DomainKey-Status: bad (test mode)
+Received: from mx27.sitecartooncodes.com (mx27.sitecartooncodes.com [216.22.37.151])
+	by looneymail-mx3.dreamhost.com (Postfix) with SMTP id 332C28966
+	for <daniel@shiffman.net>; Thu, 18 Jan 2007 17:51:08 -0800 (PST)
+Comment: DomainKeys? See http://antispam.yahoo.com/domainkeys
+DomainKey-Signature: a=rsa-sha1; q=dns; c=simple;
+	s=s512; d=sitecartooncodes.com;
+	b=upNDK5xAITQfzQwR9QDHcSPYj65Z1pcbDMKsqKd2QeJ37MUt+4qfn7CyuZyJt0+2KJYPRGQMuzKjaAJGW02X+g==;
+Received: from mx27.sitecartooncodes.com [216.22.37.151] by sitecartooncodes.com [216.22.37.151];
+  Thu, 18 Jan 2007 19:15:12 EST
+MIME-Version: 1.0
+From: Career Center <holiday@sitecartooncodes.com>
+To: daniel@shiffman.net
+Subject: Applicants Needed
+Date: Thu, 18 Jan 2007 19:15:12 EST
+Message-ID: <1-208237-3eBI4TXnSm4UU1BIYITs@mx27.sitecartooncodes.com>
+X-Mailer: 3.2.12-35 [Dec 13 2006, 12:56:48]
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
+
+Re: Applicants Needed ! 
+ 
+http://sitecartooncodes.com/ardyh?e=5qrK3bGNgS3mmCrK9Kbw&m=208237&l=0
+
+ 
+Card Processors Needed ASAP, Work This Week! 
+ 
+http://sitecartooncodes.com/ardyh?e=2x51vAJRUevGGj5181A.&m=208237&l=0
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+To Leave BCU: 
+ 
+http://sitecartooncodes.com/imys?m=208237&l=1
+
+ 
+or write to: BCU/16192/Coastal/Highway/Lewes/DE/19958 
+ 
+If you no longer want these:  
+http://sitecartooncodes.com/unsub.php?e=daniel@shiffman.net&m=208237 
+270_Weeks_Ave._Manorville_NY_11949
+
+
+<1;0d4ebck9Nzb33Q4eUecr;208237>
+
