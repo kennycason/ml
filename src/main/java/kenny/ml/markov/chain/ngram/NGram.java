@@ -1,4 +1,4 @@
-package kenny.ml.markov.text.ngram;
+package kenny.ml.markov.chain.ngram;
 
 public class NGram {
 	

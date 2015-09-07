@@ -1,7 +1,6 @@
 package kenny.ml.nn.rbm.save;
 
 
-import com.google.common.base.Function;
 import kenny.ml.nn.rbm.RBM;
 import kenny.ml.nn.rbm.deep.DeepRBM;
 import kenny.ml.nn.rbm.deep.LayerParameters;
@@ -13,6 +12,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Created by kenny on 5/22/14.
@@ -89,16 +89,13 @@ public class DeepRBMPersister {
         }
     }
 
-    private static final Function<String, int[]> COMMA_TO_INT_ARRAY_DESERIALIZER = new Function<String, int[]>() {
-        @Override
-        public int[] apply(String line) {
-            String[] strValues = line.split(",");
-            int[] intValues = new int[strValues.length];
-            for(int i = 0; i < intValues.length; i++) {
-                intValues[i] = Integer.parseInt(strValues[i]);
-            }
-            return intValues;
+    private static final Function<String, int[]> COMMA_TO_INT_ARRAY_DESERIALIZER = line -> {
+        String[] strValues = line.split(",");
+        int[] intValues = new int[strValues.length];
+        for(int i = 0; i < intValues.length; i++) {
+            intValues[i] = Integer.parseInt(strValues[i]);
         }
+        return intValues;
     };
 
 }

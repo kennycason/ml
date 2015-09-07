@@ -1,9 +1,7 @@
 package kenny.ml.nn.rbm.save;
 
-
-import com.google.common.base.Function;
-import kenny.ml.nn.rbm.math.Matrix;
 import kenny.ml.nn.rbm.RBM;
+import kenny.ml.nn.rbm.math.Matrix;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
@@ -12,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Created by kenny on 5/22/14.
@@ -85,28 +84,22 @@ public class RBMPersister {
         return rbm;
     }
 
-    private static final Function<String, int[]> COMMA_TO_INT_ARRAY_DESERIALIZER = new Function<String, int[]>() {
-        @Override
-        public int[] apply(String line) {
-            String[] strValues = line.split(",");
-            int[] intValues = new int[strValues.length];
-            for(int i = 0; i < intValues.length; i++) {
-                intValues[i] = Integer.parseInt(strValues[i]);
-            }
-            return intValues;
+    private static final Function<String, int[]> COMMA_TO_INT_ARRAY_DESERIALIZER = line -> {
+        String[] strValues = line.split(",");
+        int[] intValues = new int[strValues.length];
+        for(int i = 0; i < intValues.length; i++) {
+            intValues[i] = Integer.parseInt(strValues[i]);
         }
+        return intValues;
     };
 
-    private static final Function<String, double[]> COMMA_TO_DOUBLE_ARRAY_DESERIALIZER = new Function<String, double[]>() {
-        @Override
-        public double[] apply(String line) {
-            String[] strValues = line.split(",");
-            double[] doubleValues = new double[strValues.length];
-            for(int i = 0; i < doubleValues.length; i++) {
-                doubleValues[i] = Double.parseDouble(strValues[i]);
-            }
-            return doubleValues;
+    private static final Function<String, double[]> COMMA_TO_DOUBLE_ARRAY_DESERIALIZER = line -> {
+        String[] strValues = line.split(",");
+        double[] doubleValues = new double[strValues.length];
+        for(int i = 0; i < doubleValues.length; i++) {
+            doubleValues[i] = Double.parseDouble(strValues[i]);
         }
+        return doubleValues;
     };
 
 }

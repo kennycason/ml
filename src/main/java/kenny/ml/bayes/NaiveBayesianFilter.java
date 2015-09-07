@@ -2,8 +2,6 @@ package kenny.ml.bayes;
 
 import ch.lambdaj.Lambda;
 import ch.lambdaj.function.matcher.Predicate;
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import kenny.ml.nlp.tokenizer.NGramTokenizer;
 import kenny.ml.nlp.tokenizer.WhiteSpaceWordTokenizer;
 import kenny.ml.nlp.tokenizer.WordTokenizer;
@@ -12,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class NaiveBayesianFilter implements BayesianFilter {
 
@@ -32,7 +32,7 @@ public class NaiveBayesianFilter implements BayesianFilter {
             tokens = Lambda.filter(filter, tokens);
         }
         for(Function<String, String> filter : tokenNormalizers) {
-            tokens = Lists.transform(tokens, filter);
+            tokens = tokens.stream().map(filter).collect(Collectors.toList());
         }
         final NGramTokenizer nGramTokenizer = new NGramTokenizer();
 

@@ -1,7 +1,5 @@
-package kenny.ml.markov.text;
+package kenny.ml.markov.chain.ngram;
 
-
-import kenny.ml.markov.text.ngram.NGram;
 
 import java.util.Arrays;
 

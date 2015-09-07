@@ -1,8 +1,9 @@
-package kenny.ml.markov.text;
+package kenny.ml.markov.chain;
 
 
-import kenny.ml.markov.text.ngram.ITokenizer;
-import kenny.ml.markov.text.ngram.NGram;
+import kenny.ml.markov.chain.ngram.ITokenizer;
+import kenny.ml.markov.chain.ngram.NGram;
+import kenny.ml.markov.chain.ngram.Sentence;
 import org.apache.commons.io.IOUtils;
 
 import java.util.ArrayList;

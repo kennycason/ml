@@ -23,7 +23,7 @@ public class Item implements Comparable<Item>, Iterable<Feature> {
     private Map<String, Feature> features = new HashMap<>();
 
     public Item(String name) {
-        this(name, Collections.EMPTY_LIST);
+        this(name, Collections.emptyList());
     }
 
     public Item(String name, Feature... features) {

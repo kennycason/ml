@@ -1,8 +1,10 @@
-package kenny.ml.markov.text;
+package kenny.ml.markov.chain.text;
 
 
-import kenny.ml.markov.text.ngram.BigramTokenizer;
-import kenny.ml.markov.text.ngram.UnigramTokenizer;
+import kenny.ml.markov.chain.ngram.BigramTokenizer;
+import kenny.ml.markov.chain.MarkovChains;
+import kenny.ml.markov.chain.ngram.Sentence;
+import kenny.ml.markov.chain.ngram.UnigramTokenizer;
 
 /**
  * full list of games: http://www.gamerevolution.com/game/all/all/long_name/asc

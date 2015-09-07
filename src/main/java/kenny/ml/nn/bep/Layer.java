@@ -7,6 +7,12 @@ import java.util.Random;
  * @author kenneth cason
  */
 public class Layer {
+
+	/*
+	 * 層を初期化する時、重みをランダムに設定する
+	 * Set weights randomly upon initialization of the layer
+	 */
+	private static final Random RANDOM = new Random();
 	
 	private int numNeurons;	// 神経数: number of neurons
 	
@@ -24,35 +30,27 @@ public class Layer {
 	
 	private double[] biasWeights; 	// バイアスの重み:bias weights	
 	
-	Layer parentLayer;		// 親層: parent layer
+	private Layer parentLayer;		// 親層: parent layer
 	
-	Layer childLayer;		// 子層: child layer
+	private Layer childLayer;		// 子層: child layer
 
-	/*
-	 * 層を初期化する時、重みをランダムに設定する
-	 * Set weights randomly upon initialization of the layer
-	 */
-	Random rand;
-	
-	public Layer() {
-		parentLayer = null;
-		childLayer = null;
-		rand = new Random();
-	}
+
+	public Layer() {}
 	
 	/**
 	 * 層を初期化する: initialize the layer
 	 * @param numNeurons　この層の神経数: the number of neurons in this layer
 	 * @param parent　親層: parent layer
 	 * @param child　子層: child layer
+	 * @param useBias バイアス: bias
 	 */
-	public void init(int _numNeurons, Layer parent, Layer child, boolean bias) {
-		useBias = bias;
-		numNeurons = _numNeurons;
-		neurons = new Neuron[numNeurons];
-		teacherSignals = new double[numNeurons];
-		errors = new double[numNeurons];
-	    for(int i = 0; i < numNeurons; i++) {
+	public void init(int numNeurons, Layer parent, Layer child, boolean useBias) {
+		this.numNeurons = numNeurons;
+		this.useBias = useBias;
+		neurons = new Neuron[this.numNeurons];
+		teacherSignals = new double[this.numNeurons];
+		errors = new double[this.numNeurons];
+	    for(int i = 0; i < this.numNeurons; i++) {
 	    	neurons[i] = new Neuron(); // init all values
 	    }
 	    
@@ -67,7 +65,7 @@ public class Layer {
 		    	for(int i = 0; i < childLayer.numNeurons; i++) {
 		    		node.connectNode(childLayer.neurons[i]);
 		    		// 重みとバイアス重みを初期化する: initialize the weights
-		    		node.setWeight(i, rand.nextInt(200) / 100.0 - 1);
+		    		node.setWeight(i, RANDOM.nextInt(200) / 100.0 - 1);
 		    	}
 		    }
 		    if(useBias) {
@@ -75,7 +73,7 @@ public class Layer {
 		    	biasWeights = new double[childLayer.numNeurons];
 				// バイアスも-1.0〜1.0
 				for (int i = 0; i < biasWeights.length; i++) {
-					biasWeights[i] = rand.nextInt(200) / 100.0 - 1;
+					biasWeights[i] = RANDOM.nextInt(200) / 100.0 - 1;
 				}
 				for(int i = 0; i < biasValues.length; i++) {
 					biasValues[i] = -1;
@@ -88,7 +86,7 @@ public class Layer {
 			 biasValues = null;
 		}
 		
-		for (int i = 0; i < numNeurons; i++) {
+		for (int i = 0; i < this.numNeurons; i++) {
 			neurons[i].setValue(0);
 			teacherSignals[i] = 0;
 			errors[i] = 0;
@@ -98,7 +96,7 @@ public class Layer {
 			for(Neuron node : neurons) {
 	    		for(int i = 0; i < node.getAllLinked().size(); i++) {
 	    			// 重みとバイアス重みを初期化する: initialize the weights 
-	    			node.setWeight(i, rand.nextInt(200) / 100.0 - 1); 
+	    			node.setWeight(i, RANDOM.nextInt(200) / 100.0 - 1);
 	    		}
 	    	}
 		}

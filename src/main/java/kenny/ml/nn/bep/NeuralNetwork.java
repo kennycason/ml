@@ -171,7 +171,6 @@ public class NeuralNetwork {
 		}
 	}
 
-
 	public double getInput(int i) {
 		if (i >= 0 && i < inputLayer.getNumNeurons()) {
 			return inputLayer.getNeuron(i).getValue();
@@ -180,7 +179,7 @@ public class NeuralNetwork {
 	}
 
 	public double[] getInputs() {
-		double[] inputs = new double[inputLayer.getNeurons().length];
+		final double[] inputs = new double[inputLayer.getNeurons().length];
 		for (int i = 0; i < inputs.length; i++) {
 			inputs[i] = inputLayer.getNeuron(i).getValue();
 		}
@@ -206,8 +205,8 @@ public class NeuralNetwork {
 	 * 
 	 * @return
 	 */
-	public double[][] getInputsXY() {
-		double[][] inputs = new double[config.inputWidth][config.inputHeight];
+	public double[][] getInputsGrid() {
+		final double[][] inputs = new double[config.inputWidth][config.inputHeight];
 		for (int y = 0; y < config.inputHeight
 				&& y < inputLayer.getNeurons().length; y++) {
 			for (int x = 0; x < config.inputWidth
@@ -226,7 +225,6 @@ public class NeuralNetwork {
 	 * get a value from the output layer
 	 * 
 	 * @param i ノード番号: node number
-	 * @param value 値: value
 	 */
 	public double getOutput(int i) {
 		if (i >= 0 && i < outputLayer.getNumNeurons()) {
@@ -268,7 +266,7 @@ public class NeuralNetwork {
 	 * 
 	 * @return
 	 */
-	public double[][] getOutputsXY() {
+	public double[][] getOutputsGrid() {
 		double[][] outputs = new double[config.outputWidth][config.outputHeight];
 		for (int y = 0; y < config.outputHeight
 				&& y < outputLayer.getNeurons().length; y++) {

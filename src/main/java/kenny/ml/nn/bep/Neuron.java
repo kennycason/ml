@@ -1,7 +1,9 @@
 package kenny.ml.nn.bep;
 
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Neuron
@@ -11,19 +13,15 @@ import java.util.LinkedList;
 
 public class Neuron {
 
-	private double value; // this contains the value of this node
+	private double value = 0; // this contains the value of this node
 	
 	private double learningRateCoefficient; // learning rate * learning rate coefficient = total learning rate
 	
-	private LinkedList<Neuron> links; // the links to other nodes
+	private List<Neuron> links = new ArrayList<>(); // the links to other nodes
 
-	private LinkedList<Double> weights; // weights 
+	private List<Double> weights = new ArrayList<>(); // weights
 
-	public Neuron() {
-		value = 0;
-		links = new LinkedList<Neuron>();
-		weights = new LinkedList<Double>();
-	}
+	public Neuron() {}
 
 	/**
 	 * getValue - returns the value
@@ -85,15 +83,15 @@ public class Neuron {
 	
 	/**
 	 * getWeights - returns all the links weights
-	 * @Return LinkedList<MLLNode> - the integer LinkedList<MLLNode> of weights
+	 * @Return List<Double> - the integer List<Double> of weights
 	 */
-	public LinkedList<Double> getWeights() {
+	public List<Double> getWeights() {
 		return weights;
 	}
 
 	/**
 	 * connectNode - connect to another node
-	 * @Param MLLNode -  node 
+	 * @Param Neuron -  node
 	 */
 	public void connectNode(Neuron node) {
 		links.add(node);
@@ -102,16 +100,16 @@ public class Neuron {
 
 	/**
 	 * getAllLinked - returns all the linked elements
-	 * @Return LinkedList<MLLNode> - the linked elements
+	 * @Return List<Neuron> - the linked elements
 	 */
-	public LinkedList<Neuron> getAllLinked() {
+	public List<Neuron> getAllLinked() {
 		return links;
 	}
 
 	/**
 	 * get - returns a specific linked element
 	 * @Param int - which element to return
-	 * @Return MLLNode - the specific linked element
+	 * @Return Neuron - the specific linked element
 	 */
 	public Neuron get(int i) {
 		return links.get(i);
@@ -129,10 +127,10 @@ public class Neuron {
 	
 	/**
 	 * deleteAllLinks - deletes all links
-	 * @Return LinkedList<MLLNode> - returns all the deleted elements
+	 * @Return LinkedList<Neuron> - returns all the deleted elements
 	 */
-	public LinkedList<Neuron> deleteAllLinks() {
-		LinkedList<Neuron> temp = links;
+	public List<Neuron> deleteAllLinks() {
+		final List<Neuron> temp = links;
 		links.clear();
 		weights.clear();
 		return temp;

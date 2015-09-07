@@ -1,19 +1,15 @@
 package kenny.ml.nn.bep;
 
-import org.junit.Ignore;
 import org.junit.Test;
-
-import java.util.Arrays;
 
 public class TestBEPNeuralNetwork {
 
-	
 	@Test
-	public void test() {
+	public void and() {
 		NeuralNetworkConfig config = new NeuralNetworkConfig();
 		config.bias = true;
 		config.numCenterLayers = 1;
-		config.numCenterNodes = 20;
+		config.numCenterNodes = 10;
 		config.numInputNodes = 2;
 		config.numOutputNodes = 1;
 		config.learningRate = 0.8;
@@ -21,19 +17,90 @@ public class TestBEPNeuralNetwork {
 		
 		int numTrainData = 4;
 		double[][] trainData = new double[numTrainData][nn.getInputs().length];
-		double[][] teacherSignal = new double[numTrainData][nn.getOutputs().length];
+		double[][] teacherSignals = new double[numTrainData][nn.getOutputs().length];
 		
-		trainData[0] = new double[]{0.0, 0.0};  // 0 & 0
-		trainData[1] = new double[]{0.0, 1.0};  // 0 & 1
-		trainData[2] = new double[]{1.0, 0.0};  // 1 & 0
-		trainData[3] = new double[]{1.0, 1.0};  // 1 & 1
+		trainData[0] = new double[]{0, 0};
+		trainData[1] = new double[]{0, 1};
+		trainData[2] = new double[]{1, 0};
+		trainData[3] = new double[]{1, 1};
 
-		teacherSignal[0] = new double[]{0.0};
-		teacherSignal[1] = new double[]{0.0};
-		teacherSignal[2] = new double[]{0.0};
-		teacherSignal[3] = new double[]{1.0};
-		
-		// Train
+		teacherSignals[0] = new double[]{0};
+		teacherSignals[1] = new double[]{0};
+		teacherSignals[2] = new double[]{0};
+		teacherSignals[3] = new double[]{1};
+
+		train(nn, trainData, teacherSignals);
+		printResults(nn, trainData, teacherSignals);
+	}
+
+	@Test
+	public void or() {
+		NeuralNetworkConfig config = new NeuralNetworkConfig();
+		config.bias = true;
+		config.numCenterLayers = 3;
+		config.numCenterNodes = 4;
+		config.numInputNodes = 2;
+		config.numOutputNodes = 1;
+		config.learningRate = 0.05;
+		NeuralNetwork nn = new NeuralNetwork(config);
+
+		int numTrainData = 4;
+		double[][] trainData = new double[numTrainData][nn.getInputs().length];
+		double[][] teacherSignals = new double[numTrainData][nn.getOutputs().length];
+
+		trainData[0] = new double[]{0, 0};
+		trainData[1] = new double[]{0, 1};
+		trainData[2] = new double[]{1, 0};
+		trainData[3] = new double[]{1, 1};
+
+		teacherSignals[0] = new double[]{0};
+		teacherSignals[1] = new double[]{1};
+		teacherSignals[2] = new double[]{1};
+		teacherSignals[3] = new double[]{1};
+
+		train(nn, trainData, teacherSignals);
+		printResults(nn, trainData, teacherSignals);
+	}
+
+	@Test
+	public void highLow() {
+		NeuralNetworkConfig config = new NeuralNetworkConfig();
+		config.bias = true;
+		config.numCenterLayers = 2;
+		config.numCenterNodes = 4;
+		config.numInputNodes = 3;
+		config.numOutputNodes = 1;
+		config.learningRate = 0.5;
+		NeuralNetwork nn = new NeuralNetwork(config);
+
+		int numTrainData = 8;
+		double[][] trainData = new double[numTrainData][nn.getInputs().length];
+		double[][] teacherSignals = new double[numTrainData][nn.getOutputs().length];
+
+		trainData[0] = new double[]{0,0,0};
+		trainData[1] = new double[]{0,0,1};
+		trainData[2] = new double[]{0,1,0};
+		trainData[3] = new double[]{0,1,1};
+		trainData[4] = new double[]{1,0,0};
+		trainData[5] = new double[]{1,0,1};
+		trainData[6] = new double[]{1,1,0};
+		trainData[7] = new double[]{1,1,1};
+
+		teacherSignals[0] = new double[]{0};
+		teacherSignals[1] = new double[]{0};
+		teacherSignals[2] = new double[]{0};
+		teacherSignals[3] = new double[]{0};
+		teacherSignals[4] = new double[]{1};
+		teacherSignals[5] = new double[]{1};
+		teacherSignals[6] = new double[]{1};
+		teacherSignals[7] = new double[]{1};
+
+		train(nn, trainData, teacherSignals);
+		printResults(nn, trainData, teacherSignals);
+	}
+
+	private void train(final NeuralNetwork nn, final double[][] trainData, final double[][] teacherSignals) {
+		final int numTrainData = trainData.length;
 		double maxError = 0.001;
 		double error = Double.MAX_VALUE;
 		int count = 0;
@@ -41,12 +108,12 @@ public class TestBEPNeuralNetwork {
 		while(error > maxError) {
 			error = 0;
 			for(int i = 0; i < numTrainData; i++) {
-				for(int j = 0; j < config.numInputNodes; j++) {
+				for(int j = 0; j < nn.getInputHeight(); j++) {
 					nn.setInput(j, trainData[i][j]);
 					nn.setInput(j, trainData[i][j]);
 				}
-				for(int j = 0; j < config.numOutputNodes; j++) {
-					nn.setTeacherSignal(j, teacherSignal[i][j]);
+				for(int j = 0; j < nn.getInputHeight(); j++) {
+					nn.setTeacherSignal(j, teacherSignals[i][j]);
 				}
 				nn.feedForward();
 				error += nn.calculateError();
@@ -59,89 +126,26 @@ public class TestBEPNeuralNetwork {
 				System.out.println("[" + count + "] error = " + error);
 			}
 		}
-		
+	}
+
+	private void printResults(final NeuralNetwork nn, final double[][] trainData, final double[][] teacherSignals) {
+		final int numTrainData = trainData.length;
 		// print results
 		for(int i = 0; i < numTrainData; i++) {
 			nn.clearAllValues();
-			System.out.print("[ ");
+			System.out.print("[");
 			for(int j = 0; j < nn.getInputs().length; j++) {
 				nn.setInput(j, trainData[i][j]);
 				System.out.print(" " + trainData[i][j]);
 			}
-			System.out.print("] => [ ");
+			System.out.print("] -> [");
 			nn.feedForward();
 			for(int j = 0; j < nn.getOutputs().length; j++) {
-				nn.setTeacherSignal(j, teacherSignal[i][j]);
+				nn.setTeacherSignal(j, teacherSignals[i][j]);
 				System.out.print(nn.getOutput(j));
 			}
 			System.out.println("]");
 		}
-	}
-	
-	@Ignore
-	public void sanityCheck() {
-		NeuralNetworkConfig config = new NeuralNetworkConfig();
-		config.bias = false;
-		config.numCenterLayers = 1;
-		config.numCenterNodes = 3;
-		config.numInputNodes = 2;
-		config.numOutputNodes = 1;
-		config.learningRate = 0.2;
-		NeuralNetwork nn = new NeuralNetwork(config);
-		
-		int numTrainData = 1;
-		double[][] trainData = new double[numTrainData][nn.getInputs().length];
-		double[][] teacherSignal = new double[numTrainData][nn.getOutputs().length];
-		
-		trainData[0] = new double[]{1.0, 1.0};  // 1 & 1
-
-		teacherSignal[0] = new double[]{1.0};
-
-		for(int i = 0; i < 100; i++) {
-			nn.setInput(0, trainData[0][0]);
-			nn.setInput(1, trainData[0][1]);
-	
-			nn.setTeacherSignal(0, teacherSignal[0][0]);
-			nn.feedForward();
-			System.out.println("FEED FORWARD");
-			System.out.println("V: " + nn.getInputLayer().getNeuron(0).getValue());
-			System.out.println("W: " + nn.getInputLayer().getNeuron(0).getWeights());
-			System.out.println("V: " + nn.getInputLayer().getNeuron(1).getValue());
-			System.out.println("W: " + nn.getInputLayer().getNeuron(1).getWeights());
-	
-			System.out.println("V: " + nn.getCenterLayers()[0].getNeuron(0).getValue());
-			System.out.println("W: " + nn.getCenterLayers()[0].getNeuron(0).getWeights());
-			System.out.println("V: " + nn.getCenterLayers()[0].getNeuron(0).getValue());
-			System.out.println("W: " + nn.getCenterLayers()[0].getNeuron(1).getWeights());
-			System.out.println("V: " + nn.getCenterLayers()[0].getNeuron(0).getValue());
-			System.out.println("W: " + nn.getCenterLayers()[0].getNeuron(2).getWeights());
-			System.out.println(Arrays.toString(nn.getOutputs()));
-			nn.calculateError();
-			nn.backPropagate();
-			
-			System.out.println("BACK PROPAGATE");
-			System.out.println("V: " + nn.getInputLayer().getNeuron(0).getValue());
-			System.out.println("W: " + nn.getInputLayer().getNeuron(0).getWeights());
-			System.out.println("V: " + nn.getInputLayer().getNeuron(1).getValue());
-			System.out.println("W: " + nn.getInputLayer().getNeuron(1).getWeights());
-	
-			System.out.println("V: " + nn.getCenterLayers()[0].getNeuron(0).getValue());
-			System.out.println("W: " + nn.getCenterLayers()[0].getNeuron(0).getWeights());
-			System.out.println("V: " + nn.getCenterLayers()[0].getNeuron(0).getValue());
-			System.out.println("W: " + nn.getCenterLayers()[0].getNeuron(1).getWeights());
-			System.out.println("V: " + nn.getCenterLayers()[0].getNeuron(0).getValue());
-			System.out.println("W: " + nn.getCenterLayers()[0].getNeuron(2).getWeights());
-			System.out.println(Arrays.toString(nn.getOutputs()));
-			
-			nn.clearAllValues();
-		}
-
-		// System.out.println(sigmoid(1.096587868));
-	}
-
-	
-	public double sigmoid(double x) {
-		return (1.0 / (1 + Math.exp(-x)));
 	}
 
 }
