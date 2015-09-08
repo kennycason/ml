@@ -1,6 +1,5 @@
 package kenny.ml.decisiontree;
 
-import ch.lambdaj.Lambda;
 import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -30,9 +29,6 @@ public class DecisionTree {
     private Tree train(final String target, final List<Feature> features, final List<String> labels) {
         final List<Pair<String, Double>> gains = calculateGains(target, labels, features);
 
-        System.out.println("L: " + Lambda.join(labels));
-        features.forEach(f -> System.out.println(f.features));
-
         final Tree root = new Tree();
         root.label = gains.get(0).getKey();
         return train(target, root, gains, features);
@@ -43,8 +39,6 @@ public class DecisionTree {
 
         // if there is no optimum path, pick the first
         if(allGainsAreZero(gains)) {
-            System.out.println(root.label);
-
             final Tree leaf = new Tree();
             leaf.label = target;
             leaf.value = features.get(0).get(target);
