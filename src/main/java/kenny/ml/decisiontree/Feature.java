@@ -1,4 +1,4 @@
-package kenny.ml.decisiontree.data;
+package kenny.ml.decisiontree;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +9,7 @@ import java.util.Set;
  */
 public class Feature {
 
-    private final Map<String, Enum> features = new HashMap<>();
+    public final Map<String, Enum> features = new HashMap<>();
 
     public Enum get(final String label) {
         return features.get(label);

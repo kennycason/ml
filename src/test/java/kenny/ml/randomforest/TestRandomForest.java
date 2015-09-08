@@ -1,16 +1,15 @@
-package kenny.ml.decisiontree;
+package kenny.ml.randomforest;
 
+import kenny.ml.decisiontree.Feature;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-
 /**
  * Created by kenny
  */
-public class TestDecisionTree {
+public class TestRandomForest {
 
     private static final String OUTLOOK = "Outlook";
     private enum Outlook { RAINY, OVERCAST, SUNNY }
@@ -27,109 +26,128 @@ public class TestDecisionTree {
     private static final String PLAY_GOLF = "Play Golf";
     private enum PlayGolf { YES, NO }
 
+    private int correct = 0;
+    private int incorrect = 0;
+
     @Test
     public void test() {
-        final DecisionTree decisionTree = new DecisionTree();
-        final Tree tree = decisionTree.train(PLAY_GOLF, loadFeatures());
-        System.out.println(tree);
+        final RandomForest randomForest = new RandomForest();
+//        // these settings will function like a single decision tree
+//        randomForest.labelSampleRate = 1.0;
+//        randomForest.featureSampleRate = 0.0;
+//        randomForest.numTrees = 1;
+        randomForest.labelSampleRate = 0.9;
+        randomForest.featureSampleRate = 0.5;
+        randomForest.numTrees = 100;
 
-        assertEquals(PlayGolf.NO, tree.walk(new Feature()
+        final Forest forest = randomForest.train(PLAY_GOLF, loadFeatures());
+
+        System.out.println(forest);
+
+        tally(PlayGolf.NO, forest.walk(new Feature()
                 .set(PLAY_GOLF, PlayGolf.NO)
                 .set(OUTLOOK, Outlook.RAINY)
                 .set(TEMP, Temp.HOT)
                 .set(HUMIDITY, Humidity.HIGH)
                 .set(WINDY, Windy.FALSE)));
 
-        assertEquals(PlayGolf.YES, tree.walk(new Feature()
+        tally(PlayGolf.YES, forest.walk(new Feature()
                 .set(PLAY_GOLF, PlayGolf.YES)
                 .set(OUTLOOK, Outlook.OVERCAST)
                 .set(TEMP, Temp.HOT)
                 .set(HUMIDITY, Humidity.HIGH)
                 .set(WINDY, Windy.FALSE)));
 
-        assertEquals(PlayGolf.YES, tree.walk(new Feature()
+        tally(PlayGolf.YES, forest.walk(new Feature()
                 .set(PLAY_GOLF, PlayGolf.YES)
                 .set(OUTLOOK, Outlook.OVERCAST)
                 .set(TEMP, Temp.HOT)
                 .set(HUMIDITY, Humidity.HIGH)
                 .set(WINDY, Windy.FALSE)));
 
-        assertEquals(PlayGolf.YES, tree.walk(new Feature()
+        tally(PlayGolf.YES, forest.walk(new Feature()
                 .set(PLAY_GOLF, PlayGolf.YES)
                 .set(OUTLOOK, Outlook.SUNNY)
                 .set(TEMP, Temp.MILD)
                 .set(HUMIDITY, Humidity.HIGH)
                 .set(WINDY, Windy.FALSE)));
 
-        assertEquals(PlayGolf.YES, tree.walk(new Feature()
+        tally(PlayGolf.YES, forest.walk(new Feature()
                 .set(PLAY_GOLF, PlayGolf.YES)
                 .set(OUTLOOK, Outlook.SUNNY)
                 .set(TEMP, Temp.COOL)
                 .set(HUMIDITY, Humidity.NORMAL)
                 .set(WINDY, Windy.FALSE)));
 
-        assertEquals(PlayGolf.NO, tree.walk(new Feature()
+        tally(PlayGolf.NO, forest.walk(new Feature()
                 .set(PLAY_GOLF, PlayGolf.NO)
                 .set(OUTLOOK, Outlook.SUNNY)
                 .set(TEMP, Temp.COOL)
                 .set(HUMIDITY, Humidity.NORMAL)
                 .set(WINDY, Windy.TRUE)));
 
-        assertEquals(PlayGolf.YES, tree.walk(new Feature()
+        tally(PlayGolf.YES, forest.walk(new Feature()
                 .set(PLAY_GOLF, PlayGolf.YES)
                 .set(OUTLOOK, Outlook.OVERCAST)
                 .set(TEMP, Temp.COOL)
                 .set(HUMIDITY, Humidity.NORMAL)
                 .set(WINDY, Windy.TRUE)));
 
-        assertEquals(PlayGolf.NO, tree.walk(new Feature()
+        tally(PlayGolf.NO, forest.walk(new Feature()
                 .set(PLAY_GOLF, PlayGolf.NO)
                 .set(OUTLOOK, Outlook.RAINY)
                 .set(TEMP, Temp.MILD)
                 .set(HUMIDITY, Humidity.HIGH)
                 .set(WINDY, Windy.FALSE)));
 
-        assertEquals(PlayGolf.YES, tree.walk(new Feature()
+        tally(PlayGolf.YES, forest.walk(new Feature()
                 .set(PLAY_GOLF, PlayGolf.YES)
                 .set(OUTLOOK, Outlook.RAINY)
                 .set(TEMP, Temp.COOL)
                 .set(HUMIDITY, Humidity.NORMAL)
                 .set(WINDY, Windy.FALSE)));
 
-        assertEquals(PlayGolf.YES, tree.walk(new Feature()
+        tally(PlayGolf.YES, forest.walk(new Feature()
                 .set(PLAY_GOLF, PlayGolf.YES)
                 .set(OUTLOOK, Outlook.SUNNY)
                 .set(TEMP, Temp.MILD)
                 .set(HUMIDITY, Humidity.NORMAL)
                 .set(WINDY, Windy.FALSE)));
 
-        assertEquals(PlayGolf.YES, tree.walk(new Feature()
+        tally(PlayGolf.YES, forest.walk(new Feature()
                 .set(PLAY_GOLF, PlayGolf.YES)
                 .set(OUTLOOK, Outlook.RAINY)
                 .set(TEMP, Temp.MILD)
                 .set(HUMIDITY, Humidity.NORMAL)
                 .set(WINDY, Windy.TRUE)));
 
-        assertEquals(PlayGolf.YES, tree.walk(new Feature()
+        tally(PlayGolf.YES, forest.walk(new Feature()
                 .set(PLAY_GOLF, PlayGolf.YES)
                 .set(OUTLOOK, Outlook.OVERCAST)
                 .set(TEMP, Temp.MILD)
                 .set(HUMIDITY, Humidity.HIGH)
                 .set(WINDY, Windy.TRUE)));
 
-        assertEquals(PlayGolf.YES, tree.walk(new Feature()
+        tally(PlayGolf.YES, forest.walk(new Feature()
                 .set(PLAY_GOLF, PlayGolf.YES)
                 .set(OUTLOOK, Outlook.OVERCAST)
                 .set(TEMP, Temp.HOT)
                 .set(HUMIDITY, Humidity.NORMAL)
                 .set(WINDY, Windy.FALSE)));
 
-        assertEquals(PlayGolf.NO, tree.walk(new Feature()
+        tally(PlayGolf.NO, forest.walk(new Feature()
                 .set(PLAY_GOLF, PlayGolf.NO)
                 .set(OUTLOOK, Outlook.SUNNY)
                 .set(TEMP, Temp.MILD)
                 .set(HUMIDITY, Humidity.HIGH)
                 .set(WINDY, Windy.TRUE)));
+
+        System.out.println((((double) correct) / (correct + incorrect) * 100.0) + "% correct");
+    }
+
+    private final void tally(Enum expected, Enum actual) {
+        if (expected == actual) { correct++; }
+        else { incorrect++; }
     }
 
     private static List<Feature> loadFeatures() {

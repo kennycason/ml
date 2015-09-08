@@ -1,5 +1,6 @@
-package kenny.ml.decisiontree.data;
+package kenny.ml.decisiontree;
 
+import ch.lambdaj.Lambda;
 import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -17,8 +18,8 @@ import java.util.Set;
  */
 public class DecisionTree {
 
-    public DecisionTree() {
-    }
+    public DecisionTree() {}
+
     public Tree train(final String target, final List<Feature> features) {
         if(features.isEmpty()) { throw new IllegalArgumentException("There must be at least one feature."); }
 
@@ -27,18 +28,34 @@ public class DecisionTree {
     }
 
     private Tree train(final String target, final List<Feature> features, final List<String> labels) {
-        final List<String> sortedLabels = stripEntropyFromList(calculateGains(target, labels, features));
+        final List<Pair<String, Double>> gains = calculateGains(target, labels, features);
+
+        System.out.println("L: " + Lambda.join(labels));
+        features.forEach(f -> System.out.println(f.features));
 
         final Tree root = new Tree();
-        root.label = sortedLabels.get(0);
-        return train(target, root, sortedLabels, features);
+        root.label = gains.get(0).getKey();
+        return train(target, root, gains, features);
     }
 
-    private Tree train(final String target, final Tree root, final List<String> sortedLabels, final List<Feature> features) {
-        if (sortedLabels.isEmpty()) { return root; }
+    private Tree train(final String target, final Tree root, List<Pair<String, Double>> gains, final List<Feature> features) {
         if (root.isLeaf()) { return root; }
 
-        final String maxGainLabel = sortedLabels.remove(0);
+        // if there is no optimum path, pick the first
+        if(allGainsAreZero(gains)) {
+            System.out.println(root.label);
+
+            final Tree leaf = new Tree();
+            leaf.label = target;
+            leaf.value = features.get(0).get(target);
+
+            root.children.put(features.get(0).get(root.label), leaf);
+            return root;
+        }
+
+        final List<String> sortedLabels = stripEntropyFromList(gains);
+
+        final String maxGainLabel = sortedLabels.get(0);
         final Map<Enum, Map<Enum, MutableDouble>> jointCounts = jointFeatureCounts(maxGainLabel, target, features);
 
         for (Map.Entry<Enum, Map<Enum, MutableDouble>> jointCount : jointCounts.entrySet()) {
@@ -59,6 +76,20 @@ public class DecisionTree {
         }
 
         return root;
+    }
+
+    /*
+     * handle special case where there is no optimum path.
+     *
+     * e.g.
+     * {Play Golf=YES, Temp=MILD, Outlook=SUNNY}
+     * {Play Golf=NO, Temp=MILD, Outlook=SUNNY}
+     */
+    private boolean allGainsAreZero(final List<Pair<String, Double>> gains) {
+        for(Pair<String, Double> gain : gains) {
+            if(gain.getValue() != 0.0) { return false; }
+        }
+        return true;
     }
 
     private List<Feature> partitionFeatures(final String label, final Enum labelValue, final List<Feature> features) {
@@ -107,6 +138,7 @@ public class DecisionTree {
         double entropy = 0.0;
         for (MutableDouble probability : probabilities.values()) {
             if(probability.doubleValue() == 0.0) { continue; }
+
             entropy += -probability.doubleValue() * log(probability.doubleValue(), 2);
         }
         return entropy;
@@ -122,6 +154,7 @@ public class DecisionTree {
         for(Map.Entry<Enum, MutableDouble> entry : featureValueCounts.entrySet()) {
             final Map<Enum, MutableDouble> featureTargetCounts = jointCounts.get(entry.getKey());
             if (featureTargetCounts.isEmpty()) { continue; } // zero entropy
+
             entropy += (entry.getValue().doubleValue() / labelCounts) * entropy(probabilities(featureTargetCounts));
         }
         return entropy;
@@ -172,9 +205,7 @@ public class DecisionTree {
 
     private static List<String> stripEntropyFromList(final List<Pair<String, Double>> labelEntropyPairs) {
         final List<String> labels = new ArrayList<>();
-        for (Pair<String, Double> labelEntropyPair : labelEntropyPairs) {
-            labels.add(labelEntropyPair.getKey());
-        }
+        labelEntropyPairs.forEach(p -> labels.add(p.getKey()));
         return labels;
     }
 
@@ -189,9 +220,7 @@ public class DecisionTree {
      */
     private static List<String> extractLabels(final List<Feature> features) {
         final Set<String> labels = new HashSet<>();
-        for (Feature feature : features) {
-            labels.addAll(feature.getLabels());
-        }
+        features.forEach(f -> labels.addAll(f.getLabels()));
         return new ArrayList<>(labels);
     }
 
