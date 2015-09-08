@@ -10,6 +10,8 @@ Supports:
 
 - Bayesian filters
 - Clustering algorithms
+- Decision Tree
+- Random Forest
 - Markov Chains
 - NLP (very limited)
 - Back-Error Propagation NN
