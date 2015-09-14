@@ -1,15 +1,16 @@
 package kenny.ml.svm;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class CategoryMap<T> {
-	HashMap<T, Integer> oldnew;
-	HashMap<Integer, T> newold;
+	Map<T, Integer> oldnew;
+	Map<Integer, T> newold;
 	int lastindex;
 
 	public CategoryMap() {
-		oldnew = new HashMap<T, Integer>();
-		newold = new HashMap<Integer, T>();
+		oldnew = new HashMap<>();
+		newold = new HashMap<>();
 		lastindex = -1;
 	}
 

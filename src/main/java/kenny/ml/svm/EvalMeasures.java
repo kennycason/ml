@@ -30,7 +30,6 @@ public class EvalMeasures {
 				ret++;
 			}
 		}
-		System.out.println(ret + "/" + p.l + " correct");
 		return (double) ret / p.l;
 	}
 	

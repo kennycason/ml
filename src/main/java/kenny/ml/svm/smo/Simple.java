@@ -75,6 +75,7 @@ public class Simple extends AbstractSequentialMinimalOptimization {
 				}
 			}
 			if (alpha_change == 0) {
+				System.out.print("P");
 				pass++;
 			} else {
 				pass = 0;

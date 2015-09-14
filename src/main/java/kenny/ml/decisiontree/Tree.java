@@ -10,19 +10,19 @@ public class Tree {
 
     public String label;
 
-    public Enum value;
+    public String value;
 
-    public Map<Enum, Tree> children = new HashMap<>();
+    public Map<String, Tree> children = new HashMap<>();
 
     public boolean isLeaf() {
         return value != null;
     }
 
-    public Enum walk(final Feature feature) {
+    public String walk(final Feature feature) {
        return walk(feature, children.get(feature.get(label)));
     }
 
-    private static Enum walk(final Feature feature, final Tree tree) {
+    private static String walk(final Feature feature, final Tree tree) {
         if(tree == null) { return null; }
         if(tree.value != null) { return tree.value; }
 

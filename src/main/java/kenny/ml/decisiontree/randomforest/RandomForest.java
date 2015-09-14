@@ -1,4 +1,4 @@
-package kenny.ml.randomforest;
+package kenny.ml.decisiontree.randomforest;
 
 import kenny.ml.decisiontree.DecisionTree;
 import kenny.ml.decisiontree.Feature;

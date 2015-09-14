@@ -1,7 +1,9 @@
 package kenny.ml.decisiontree;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,6 +18,8 @@ import java.util.Set;
  * Created by kenny
  */
 public class DecisionTree {
+
+    private static final Logger LOGGER = Logger.getLogger(DecisionTree.class);
 
     public DecisionTree() {}
 
@@ -50,14 +54,14 @@ public class DecisionTree {
         final List<String> sortedLabels = stripEntropyFromList(gains);
 
         final String maxGainLabel = sortedLabels.get(0);
-        final Map<Enum, Map<Enum, MutableDouble>> jointCounts = jointFeatureCounts(maxGainLabel, target, features);
+        final Map<String, Map<String, MutableDouble>> jointCounts = jointFeatureCounts(maxGainLabel, target, features);
 
-        for (Map.Entry<Enum, Map<Enum, MutableDouble>> jointCount : jointCounts.entrySet()) {
-            final Enum labelValue = jointCount.getKey();
+        for (Map.Entry<String, Map<String, MutableDouble>> jointCount : jointCounts.entrySet()) {
+            final String labelValue = jointCount.getKey();
 
-            // handle entropy zero cases, since enums may not show up in data size could be 1, handle these as trivial cases
+            // handle entropy zero cases, since Strings may not show up in data size could be 1, handle these as trivial cases
             if (jointCount.getValue().size() == 1) {
-                final Enum zeroEntropyValue = jointCount.getValue().keySet().iterator().next();
+                final String zeroEntropyValue = jointCount.getValue().keySet().iterator().next();
                 final Tree leaf = new Tree();
                 leaf.label = target;
                 leaf.value = zeroEntropyValue;
@@ -86,10 +90,10 @@ public class DecisionTree {
         return true;
     }
 
-    private List<Feature> partitionFeatures(final String label, final Enum labelValue, final List<Feature> features) {
+    private List<Feature> partitionFeatures(final String label, final String labelValue, final List<Feature> features) {
         final List<Feature> partitionedFeatures = new ArrayList<>();
         for(Feature feature : features) {
-            if(feature.get(label) == labelValue) {
+            if(StringUtils.equals(feature.get(label), labelValue)) {
                 partitionedFeatures.add(feature);
             }
         }
@@ -97,9 +101,10 @@ public class DecisionTree {
     }
 
     private static void assertTargetIsBinary(final String target, final List<Feature> features) {
-        final Enum value = features.get(0).get(target);
-        if(value.getClass().getEnumConstants().length != 2) {
-            throw new IllegalArgumentException("Enum value must be a binary valued enum. i.e. consist of exactly two states.");
+        final Set<String> values = new HashSet<>();
+        features.forEach(f -> values.add(f.get(target)));
+        if(values.size() != 2) {
+            throw new IllegalArgumentException("Target value must be a binary valued String. i.e. consist of exactly two states.");
         }
     }
 
@@ -108,17 +113,17 @@ public class DecisionTree {
      * Sort from highest gain to lowest.
      */
     private static List<Pair<String, Double>> calculateGains(final String target, final List<String> labels, final List<Feature> features) {
-        System.out.println("calculate information gains");
+        LOGGER.debug("calculate information gains");
         final List<Pair<String, Double>> gains = new ArrayList<>();
 
         final double targetEntropy = entropy(probabilities(target, features));
-        System.out.println("target entropy for [" + target + "] = " + targetEntropy);
+        LOGGER.debug("target entropy for [" + target + "] = " + targetEntropy);
 
         for(String label : labels) {
             if(label.equals(target)) { continue; }
 
             final double gain = targetEntropy - jointEntropy(label, target, features);
-            System.out.println("information gain for [" + label + "/" + target + "] = " + gain);
+            LOGGER.debug("information gain for [" + label + "/" + target + "] = " + gain);
 
             gains.add(Pair.of(label, gain));
         }
@@ -128,7 +133,7 @@ public class DecisionTree {
 
     private static Comparator<Pair<String, Double>> GAIN_COMPARATOR = (o1, o2) -> -Double.compare(o1.getValue(), o2.getValue());
 
-    private static double entropy(final Map<Enum, MutableDouble> probabilities) {
+    private static double entropy(final Map<String, MutableDouble> probabilities) {
         double entropy = 0.0;
         for (MutableDouble probability : probabilities.values()) {
             if(probability.doubleValue() == 0.0) { continue; }
@@ -139,14 +144,14 @@ public class DecisionTree {
     }
 
     private static double jointEntropy(final String label, final String target, final List<Feature> features) {
-        final Map<Enum, MutableDouble> featureValueCounts = featureCounts(label, features);
+        final Map<String, MutableDouble> featureValueCounts = featureCounts(label, features);
         final double labelCounts = sum(featureValueCounts);
 
-        final Map<Enum, Map<Enum, MutableDouble>> jointCounts = jointFeatureCounts(label, target, features);
+        final Map<String, Map<String, MutableDouble>> jointCounts = jointFeatureCounts(label, target, features);
 
         double entropy = 0.0;
-        for(Map.Entry<Enum, MutableDouble> entry : featureValueCounts.entrySet()) {
-            final Map<Enum, MutableDouble> featureTargetCounts = jointCounts.get(entry.getKey());
+        for(Map.Entry<String, MutableDouble> entry : featureValueCounts.entrySet()) {
+            final Map<String, MutableDouble> featureTargetCounts = jointCounts.get(entry.getKey());
             if (featureTargetCounts.isEmpty()) { continue; } // zero entropy
 
             entropy += (entry.getValue().doubleValue() / labelCounts) * entropy(probabilities(featureTargetCounts));
@@ -154,25 +159,25 @@ public class DecisionTree {
         return entropy;
     }
 
-    private static Map<Enum, MutableDouble> probabilities(final String label, final List<Feature> features) {
+    private static Map<String, MutableDouble> probabilities(final String label, final List<Feature> features) {
         return probabilities(featureCounts(label, features));
     }
 
-    private static Map<Enum, MutableDouble> probabilities(final Map<Enum, MutableDouble> featureValueCounts) {
+    private static Map<String, MutableDouble> probabilities(final Map<String, MutableDouble> featureValueCounts) {
         final double size = sum(featureValueCounts);
 
-        final Map<Enum, MutableDouble> featureProbabilities = new HashMap<>();
-        for (Map.Entry<Enum, MutableDouble> entry : featureValueCounts.entrySet()) {
+        final Map<String, MutableDouble> featureProbabilities = new HashMap<>();
+        for (Map.Entry<String, MutableDouble> entry : featureValueCounts.entrySet()) {
             featureProbabilities.put(entry.getKey(), new MutableDouble());
             featureProbabilities.get(entry.getKey()).setValue(entry.getValue().doubleValue() / size);
         }
         return featureProbabilities;
     }
 
-    private static Map<Enum, MutableDouble> featureCounts(final String label, final List<Feature> features) {
-        final Map<Enum, MutableDouble> counts = new HashMap<>();
+    private static Map<String, MutableDouble> featureCounts(final String label, final List<Feature> features) {
+        final Map<String, MutableDouble> counts = new HashMap<>();
         for (Feature feature : features) {
-            final Enum value = feature.get(label);
+            final String value = feature.get(label);
             if(!counts.containsKey(value)) {
                 counts.put(value, new MutableDouble());
             }
@@ -181,14 +186,14 @@ public class DecisionTree {
         return counts;
     }
 
-    private static Map<Enum, Map<Enum, MutableDouble>> jointFeatureCounts(final String label, final String target, final List<Feature> features) {
-        final Map<Enum, Map<Enum, MutableDouble>> jointCounts = new HashMap<>();
+    private static Map<String, Map<String, MutableDouble>> jointFeatureCounts(final String label, final String target, final List<Feature> features) {
+        final Map<String, Map<String, MutableDouble>> jointCounts = new HashMap<>();
         for (Feature feature : features) {
-            final Enum value = feature.get(label);
+            final String value = feature.get(label);
             if (!jointCounts.containsKey(value)) {
                 jointCounts.put(value, new HashMap<>());
             }
-            final Enum targetValue = feature.get(target);
+            final String targetValue = feature.get(target);
             if (!jointCounts.get(value).containsKey(targetValue)) {
                 jointCounts.get(value).put(targetValue, new MutableDouble());
             }
@@ -203,7 +208,7 @@ public class DecisionTree {
         return labels;
     }
 
-    private static double sum(final Map<Enum, ? extends Number> map) {
+    private static double sum(final Map<String, ? extends Number> map) {
         final MutableDouble size = new MutableDouble();
         map.values().forEach(count -> size.add(count.doubleValue()));
         return size.doubleValue();

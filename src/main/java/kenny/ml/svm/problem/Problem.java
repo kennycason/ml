@@ -28,7 +28,7 @@ public class Problem {
 	public Problem() {
 		l = 0;
 		n = 0;
-		catmap = new CategoryMap<Integer>();
+		catmap = new CategoryMap<>();
 	}
 	
 

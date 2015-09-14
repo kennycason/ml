@@ -1,4 +1,4 @@
-package kenny.ml.randomforest;
+package kenny.ml.decisiontree.randomforest;
 
 import kenny.ml.decisiontree.Feature;
 import kenny.ml.decisiontree.Tree;
@@ -16,15 +16,15 @@ public class Forest {
 
     public List<Tree> trees = new ArrayList<>();
 
-    public Enum walk(final Feature feature) {
-        final Map<Enum, MutableInt> votes = tallyVotes(feature);
+    public String walk(final Feature feature) {
+        final Map<String, MutableInt> votes = tallyVotes(feature);
         return highestVote(votes);
     }
 
-    private Enum highestVote(final Map<Enum, MutableInt> votes) {
+    private String highestVote(final Map<String, MutableInt> votes) {
         int highestVoteCount = -1;
-        Enum highestVote = null;
-        for(Map.Entry<Enum, MutableInt> voteEntry : votes.entrySet()) {
+        String highestVote = null;
+        for(Map.Entry<String, MutableInt> voteEntry : votes.entrySet()) {
             if(voteEntry.getValue().intValue() > highestVoteCount) {
                 highestVoteCount = voteEntry.getValue().intValue();
                 highestVote = voteEntry.getKey();
@@ -33,10 +33,10 @@ public class Forest {
         return highestVote;
     }
 
-    private Map<Enum, MutableInt> tallyVotes(final Feature feature) {
-        final Map<Enum, MutableInt> votes = new HashMap<>();
+    private Map<String, MutableInt> tallyVotes(final Feature feature) {
+        final Map<String, MutableInt> votes = new HashMap<>();
         for(Tree tree : trees) {
-            final Enum vote = tree.walk(feature);
+            final String vote = tree.walk(feature);
             if(!votes.containsKey(vote)) {
                 votes.put(vote, new MutableInt());
             }

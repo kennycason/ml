@@ -9,9 +9,9 @@ import java.util.Set;
  */
 public class Feature {
 
-    public final Map<String, Enum> features = new HashMap<>();
+    public final Map<String, String> features = new HashMap<>();
 
-    public Enum get(final String label) {
+    public String get(final String label) {
         return features.get(label);
     }
 
@@ -19,7 +19,7 @@ public class Feature {
         return features.keySet();
     }
 
-    public Feature set(final String label, final Enum value) {
+    public Feature set(final String label, final String value) {
         features.put(label, value);
         return this;
     }
