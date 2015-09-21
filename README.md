@@ -16,7 +16,7 @@ Supports:
 - Natural Language Processing (very limited)
 - Prefix-Trie
 - Random Forest
-- Regression (Linear)
+- Regression (Linear, NonLinear Local)
 - Restricted Boltzmann Machine (single, deep, convoluted, multi-threaded)
 - Self-Organizing Map
 - Support Vector Machine
