@@ -8,17 +8,18 @@ The goal will be to refactor and unify common classes as well as provide more do
 
 Supports:
 
+- Back-Error Propagation Neural Network
 - Bayesian filters
 - Clustering algorithms
 - Decision Tree
-- Random Forest
 - Markov Chains
-- NLP (very limited)
-- Back-Error Propagation NN
+- Natural Language Processing (very limited)
+- Prefix-Trie
+- Random Forest
+- Regression (Linear)
 - Restricted Boltzmann Machine (single, deep, convoluted, multi-threaded)
 - Self-Organizing Map
 - Support Vector Machine
-- Prefix-Trie
 
 TODO:
 

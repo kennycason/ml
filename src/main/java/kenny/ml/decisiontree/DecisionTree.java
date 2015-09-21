@@ -33,8 +33,7 @@ public class DecisionTree {
     private Tree train(final String target, final List<Feature> features, final List<String> labels) {
         final List<Pair<String, Double>> gains = calculateGains(target, labels, features);
 
-        final Tree root = new Tree();
-        root.label = gains.get(0).getKey();
+        final Tree root = new Tree(gains.get(0).getKey(), null);
         return train(target, root, gains, features);
     }
 
@@ -43,9 +42,7 @@ public class DecisionTree {
 
         // if there is no optimum path, pick the first
         if(allGainsAreZero(gains)) {
-            final Tree leaf = new Tree();
-            leaf.label = target;
-            leaf.value = features.get(0).get(target);
+            final Tree leaf = new Tree(target, features.get(0).get(target));
 
             root.children.put(features.get(0).get(root.label), leaf);
             return root;
@@ -62,9 +59,7 @@ public class DecisionTree {
             // handle entropy zero cases, since Strings may not show up in data size could be 1, handle these as trivial cases
             if (jointCount.getValue().size() == 1) {
                 final String zeroEntropyValue = jointCount.getValue().keySet().iterator().next();
-                final Tree leaf = new Tree();
-                leaf.label = target;
-                leaf.value = zeroEntropyValue;
+                final Tree leaf = new Tree(target, zeroEntropyValue);
 
                 root.children.put(labelValue, leaf);
                 continue;
@@ -123,7 +118,7 @@ public class DecisionTree {
             if(label.equals(target)) { continue; }
 
             final double gain = targetEntropy - jointEntropy(label, target, features);
-            LOGGER.debug("information gain for [" + label + "/" + target + "] = " + gain);
+            System.out.println("information gain for [" + label + "/" + target + "] = " + gain);
 
             gains.add(Pair.of(label, gain));
         }

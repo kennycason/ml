@@ -8,11 +8,16 @@ import java.util.Map;
  */
 public class Tree {
 
-    public String label;
+    public final String label;
 
-    public String value;
+    public final String value;
 
-    public Map<String, Tree> children = new HashMap<>();
+    public final Map<String, Tree> children = new HashMap<>();
+
+    public Tree(final String label, final String value) {
+        this.label = label;
+        this.value = value;
+    }
 
     public boolean isLeaf() {
         return value != null;
