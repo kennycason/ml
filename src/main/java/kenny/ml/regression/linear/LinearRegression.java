@@ -18,7 +18,7 @@ public class LinearRegression {
      * Coefficient of determination (accuracy)
      * R2 = ( 1/n * Σ[(xi - E(x)) * (yi - E(y)] ) / (σx * σy))^2
      */
-    public Model regress(final double[][] points) {
+    public LinearModel regress(final double[][] points) {
         final double meanX = mean(points, 0);
         final double meanY = mean(points, 1);
         final double sumDeltaSquaredX = sumDeltaSquared(points, meanX, 0);
@@ -33,7 +33,7 @@ public class LinearRegression {
         final double standardDeviationY = standardDeviation(points, meanY, 1);
         final double coefficientOfDetermination = Math.pow(((1.0 / points.length) * sumDeltaMeansCorrelation) / (standardDeviationX * standardDeviationY), 2);
 
-        return new Model(b1, b0, coefficientOfDetermination);
+        return new LinearModel(b1, b0, coefficientOfDetermination);
     }
 
     private static double standardDeviation(final double[][] points, final double mean, final int index) {

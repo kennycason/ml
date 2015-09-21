@@ -1,7 +1,5 @@
-package kenny.ml.repression.linear;
+package kenny.ml.regression.linear;
 
-import kenny.ml.regression.linear.LinearRegression;
-import kenny.ml.regression.linear.Model;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -23,10 +21,10 @@ public class TestLinearRegression {
                 {1, 1}
         };
 
-        final Model model = LINEAR_REGRESSION.regress(grades);
-        assertEquals(1.0, model.slope, DELTA);
-        assertEquals(0.0, model.yIntercept, DELTA);
-        assertEquals(1.0, model.coefficientOfDetermination, DELTA);
+        final LinearModel linearModel = LINEAR_REGRESSION.regress(grades);
+        assertEquals(1.0, linearModel.slope, DELTA);
+        assertEquals(0.0, linearModel.yIntercept, DELTA);
+        assertEquals(1.0, linearModel.coefficientOfDetermination, DELTA);
     }
 
     @Test
@@ -39,10 +37,10 @@ public class TestLinearRegression {
                 {60, 70}
         };
 
-        final Model model = LINEAR_REGRESSION.regress(grades);
-        assertEquals(0.64, model.slope, DELTA);
-        assertEquals(26.78, model.yIntercept, DELTA);
-        assertEquals(0.48, model.coefficientOfDetermination, DELTA);
+        final LinearModel linearModel = LINEAR_REGRESSION.regress(grades);
+        assertEquals(0.64, linearModel.slope, DELTA);
+        assertEquals(26.78, linearModel.yIntercept, DELTA);
+        assertEquals(0.48, linearModel.coefficientOfDetermination, DELTA);
     }
 
 }

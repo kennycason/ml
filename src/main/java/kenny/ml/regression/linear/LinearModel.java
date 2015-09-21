@@ -3,12 +3,12 @@ package kenny.ml.regression.linear;
 /**
  * Created by kenny
  */
-public class Model {
+public class LinearModel {
     public final double slope;
     public final double yIntercept;
     public final double coefficientOfDetermination;
 
-    public Model(final double slope, final double yIntercept, final double coefficientOfDetermination) {
+    public LinearModel(final double slope, final double yIntercept, final double coefficientOfDetermination) {
         this.slope = slope;
         this.yIntercept = yIntercept;
         this.coefficientOfDetermination = coefficientOfDetermination;
