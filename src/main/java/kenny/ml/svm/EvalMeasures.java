@@ -13,7 +13,7 @@ public class EvalMeasures {
 	int computed;
 
 	public EvalMeasures(Problem p, int[] predicted, int catnum) {
-		if (predicted.length != p.l) {
+		if (predicted.length != p.trainingSize) {
 			System.err.println("Length error!");
 			return;
 		}
@@ -25,12 +25,12 @@ public class EvalMeasures {
 
 	public double accuracy() {
 		int ret = 0;
-		for (int i = 0; i < p.l; i++) {
+		for (int i = 0; i < p.trainingSize; i++) {
 			if (p.y[i] == predicted[i]) {
 				ret++;
 			}
 		}
-		return (double) ret / p.l;
+		return (double) ret / p.trainingSize;
 	}
 	
 }

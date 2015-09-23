@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Created by kenny
  */
-public class Feature {
+public class FeatureSet {
 
     public final Map<String, String> features = new HashMap<>();
 
@@ -19,9 +19,15 @@ public class Feature {
         return features.keySet();
     }
 
-    public Feature set(final String label, final String value) {
+    public FeatureSet set(final String label, final String value) {
         features.put(label, value);
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "FeatureSet{" +
+                "features=" + features +
+                '}';
+    }
 }

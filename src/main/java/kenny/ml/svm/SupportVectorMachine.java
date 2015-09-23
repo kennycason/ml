@@ -45,8 +45,8 @@ public class SupportVectorMachine {
 		if (test == null) {
 			return null;
 		}
-		int[] pred = new int[test.l];
-		for (int i = 0; i < test.l; i++) {
+		int[] pred = new int[test.trainingSize];
+		for (int i = 0; i < test.trainingSize; i++) {
 			pred[i] = (testOne(test.x[i]) < 0 ? -1 : 1);
 			
 			if(print) { 

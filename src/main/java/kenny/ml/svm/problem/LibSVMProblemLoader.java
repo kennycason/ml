@@ -31,11 +31,11 @@ public class LibSVMProblemLoader implements IProblemLoader {
             // Category:
             Integer cat = (int) Double.parseDouble(elems[0]);
             System.out.print(cat + " ");
-            problem.catmap.addCategory(cat);
-            if (problem.catmap.size() > 2) {
+            problem.categories.add(cat);
+            if (problem.categories.size() > 2) {
                 throw new IllegalArgumentException("only 2 classes allowed!");
             }
-            classes.add(problem.catmap.getNewCategoryOf(cat));
+            classes.add(problem.categories.getNewCategoryOf(cat));
             // Index/value pairs:
             examples.add(parseRow(elems));
         }
@@ -45,7 +45,7 @@ public class LibSVMProblemLoader implements IProblemLoader {
             problem.x[i] = examples.get(i);
             problem.y[i] = 2 * classes.get(i) - 1; // 0,1 => -1,1
         }
-        problem.l = examples.size();
+        problem.trainingSize = examples.size();
 
         return problem;
     }

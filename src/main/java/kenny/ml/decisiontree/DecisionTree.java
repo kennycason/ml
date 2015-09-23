@@ -1,5 +1,6 @@
 package kenny.ml.decisiontree;
 
+import ch.lambdaj.Lambda;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.tuple.Pair;
@@ -23,21 +24,21 @@ public class DecisionTree {
 
     public DecisionTree() {}
 
-    public Tree train(final String target, final List<Feature> features) {
+    public Tree train(final String target, final List<FeatureSet> features) {
         if(features.isEmpty()) { throw new IllegalArgumentException("There must be at least one feature."); }
 
-        assertTargetIsBinary(target, features);
+        assertTargetIsBinaryOrUnary(target, features);
         return train(target, features, extractLabels(features));
     }
 
-    private Tree train(final String target, final List<Feature> features, final List<String> labels) {
+    private Tree train(final String target, final List<FeatureSet> features, final List<String> labels) {
         final List<Pair<String, Double>> gains = calculateGains(target, labels, features);
 
         final Tree root = new Tree(gains.get(0).getKey(), null);
         return train(target, root, gains, features);
     }
 
-    private Tree train(final String target, final Tree root, List<Pair<String, Double>> gains, final List<Feature> features) {
+    private Tree train(final String target, final Tree root, List<Pair<String, Double>> gains, final List<FeatureSet> features) {
         if (root.isLeaf()) { return root; }
 
         // if there is no optimum path, pick the first
@@ -85,21 +86,21 @@ public class DecisionTree {
         return true;
     }
 
-    private List<Feature> partitionFeatures(final String label, final String labelValue, final List<Feature> features) {
-        final List<Feature> partitionedFeatures = new ArrayList<>();
-        for(Feature feature : features) {
-            if(StringUtils.equals(feature.get(label), labelValue)) {
-                partitionedFeatures.add(feature);
+    private List<FeatureSet> partitionFeatures(final String label, final String labelValue, final List<FeatureSet> features) {
+        final List<FeatureSet> partitionedFeatures = new ArrayList<>();
+        for(FeatureSet featureSet : features) {
+            if(StringUtils.equals(featureSet.get(label), labelValue)) {
+                partitionedFeatures.add(featureSet);
             }
         }
         return partitionedFeatures;
     }
 
-    private static void assertTargetIsBinary(final String target, final List<Feature> features) {
+    private static void assertTargetIsBinaryOrUnary(final String target, final List<FeatureSet> features) {
         final Set<String> values = new HashSet<>();
         features.forEach(f -> values.add(f.get(target)));
-        if(values.size() != 2) {
-            throw new IllegalArgumentException("Target value must be a binary valued String. i.e. consist of exactly two states.");
+        if(values.size() > 2) {
+            throw new IllegalArgumentException("Target value must be a binary valued String. i.e. consist of exactly two states (or less). found [" + Lambda.join(values) + "]");
         }
     }
 
@@ -107,7 +108,7 @@ public class DecisionTree {
      * Return a list of information gains for each of the labels.
      * Sort from highest gain to lowest.
      */
-    private static List<Pair<String, Double>> calculateGains(final String target, final List<String> labels, final List<Feature> features) {
+    private static List<Pair<String, Double>> calculateGains(final String target, final List<String> labels, final List<FeatureSet> features) {
         LOGGER.debug("calculate information gains");
         final List<Pair<String, Double>> gains = new ArrayList<>();
 
@@ -118,7 +119,7 @@ public class DecisionTree {
             if(label.equals(target)) { continue; }
 
             final double gain = targetEntropy - jointEntropy(label, target, features);
-            System.out.println("information gain for [" + label + "/" + target + "] = " + gain);
+            LOGGER.debug("information gain for [" + label + "/" + target + "] = " + gain);
 
             gains.add(Pair.of(label, gain));
         }
@@ -138,7 +139,7 @@ public class DecisionTree {
         return entropy;
     }
 
-    private static double jointEntropy(final String label, final String target, final List<Feature> features) {
+    private static double jointEntropy(final String label, final String target, final List<FeatureSet> features) {
         final Map<String, MutableDouble> featureValueCounts = featureCounts(label, features);
         final double labelCounts = sum(featureValueCounts);
 
@@ -154,7 +155,7 @@ public class DecisionTree {
         return entropy;
     }
 
-    private static Map<String, MutableDouble> probabilities(final String label, final List<Feature> features) {
+    private static Map<String, MutableDouble> probabilities(final String label, final List<FeatureSet> features) {
         return probabilities(featureCounts(label, features));
     }
 
@@ -169,10 +170,10 @@ public class DecisionTree {
         return featureProbabilities;
     }
 
-    private static Map<String, MutableDouble> featureCounts(final String label, final List<Feature> features) {
+    private static Map<String, MutableDouble> featureCounts(final String label, final List<FeatureSet> features) {
         final Map<String, MutableDouble> counts = new HashMap<>();
-        for (Feature feature : features) {
-            final String value = feature.get(label);
+        for (FeatureSet featureSet : features) {
+            final String value = featureSet.get(label);
             if(!counts.containsKey(value)) {
                 counts.put(value, new MutableDouble());
             }
@@ -181,14 +182,14 @@ public class DecisionTree {
         return counts;
     }
 
-    private static Map<String, Map<String, MutableDouble>> jointFeatureCounts(final String label, final String target, final List<Feature> features) {
+    private static Map<String, Map<String, MutableDouble>> jointFeatureCounts(final String label, final String target, final List<FeatureSet> features) {
         final Map<String, Map<String, MutableDouble>> jointCounts = new HashMap<>();
-        for (Feature feature : features) {
-            final String value = feature.get(label);
+        for (FeatureSet featureSet : features) {
+            final String value = featureSet.get(label);
             if (!jointCounts.containsKey(value)) {
                 jointCounts.put(value, new HashMap<>());
             }
-            final String targetValue = feature.get(target);
+            final String targetValue = featureSet.get(target);
             if (!jointCounts.get(value).containsKey(targetValue)) {
                 jointCounts.get(value).put(targetValue, new MutableDouble());
             }
@@ -212,7 +213,7 @@ public class DecisionTree {
     /*
      * exhaustive search, consider constructing decision tree with this knowledge
      */
-    private static List<String> extractLabels(final List<Feature> features) {
+    private static List<String> extractLabels(final List<FeatureSet> features) {
         final Set<String> labels = new HashSet<>();
         features.forEach(f -> labels.addAll(f.getLabels()));
         return new ArrayList<>(labels);

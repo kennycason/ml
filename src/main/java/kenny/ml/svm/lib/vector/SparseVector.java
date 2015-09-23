@@ -6,9 +6,9 @@ import java.util.ArrayList;
 public class SparseVector implements IVector {
 	
 	protected ArrayList<SparseVectorNode> vals;
-	
+
 	protected int size = 0;
-	
+
 	public SparseVector() {
 		this(0);
 	}

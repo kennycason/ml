@@ -1,6 +1,6 @@
 package kenny.ml.decisiontree.randomforest;
 
-import kenny.ml.decisiontree.Feature;
+import kenny.ml.decisiontree.FeatureSet;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
@@ -45,98 +45,98 @@ public class TestRandomForest {
 
         System.out.println(forest);
 
-        tally(PlayGolf.NO.toString(), forest.walk(new Feature()
+        tally(PlayGolf.NO.toString(), forest.walk(new FeatureSet()
                 .set(PLAY_GOLF, PlayGolf.NO.toString())
                 .set(OUTLOOK, Outlook.RAINY.toString())
                 .set(TEMP, Temp.HOT.toString())
                 .set(HUMIDITY, Humidity.HIGH.toString())
                 .set(WINDY, Windy.FALSE.toString())));
 
-        tally(PlayGolf.YES.toString().toString(), forest.walk(new Feature()
-                .set(PLAY_GOLF, PlayGolf.YES.toString().toString())
+        tally(PlayGolf.YES.toString(), forest.walk(new FeatureSet()
+                .set(PLAY_GOLF, PlayGolf.YES.toString())
                 .set(OUTLOOK, Outlook.OVERCAST.toString())
                 .set(TEMP, Temp.HOT.toString())
                 .set(HUMIDITY, Humidity.HIGH.toString())
                 .set(WINDY, Windy.FALSE.toString())));
 
-        tally(PlayGolf.YES.toString().toString(), forest.walk(new Feature()
-                .set(PLAY_GOLF, PlayGolf.YES.toString().toString())
+        tally(PlayGolf.YES.toString(), forest.walk(new FeatureSet()
+                .set(PLAY_GOLF, PlayGolf.YES.toString())
                 .set(OUTLOOK, Outlook.OVERCAST.toString())
                 .set(TEMP, Temp.HOT.toString())
                 .set(HUMIDITY, Humidity.HIGH.toString())
                 .set(WINDY, Windy.FALSE.toString())));
 
-        tally(PlayGolf.YES.toString().toString(), forest.walk(new Feature()
-                .set(PLAY_GOLF, PlayGolf.YES.toString().toString())
+        tally(PlayGolf.YES.toString(), forest.walk(new FeatureSet()
+                .set(PLAY_GOLF, PlayGolf.YES.toString())
                 .set(OUTLOOK, Outlook.SUNNY.toString())
                 .set(TEMP, Temp.MILD.toString())
                 .set(HUMIDITY, Humidity.HIGH.toString())
                 .set(WINDY, Windy.FALSE.toString())));
 
-        tally(PlayGolf.YES.toString().toString(), forest.walk(new Feature()
-                .set(PLAY_GOLF, PlayGolf.YES.toString().toString())
+        tally(PlayGolf.YES.toString(), forest.walk(new FeatureSet()
+                .set(PLAY_GOLF, PlayGolf.YES.toString())
                 .set(OUTLOOK, Outlook.SUNNY.toString())
                 .set(TEMP, Temp.COOL.toString())
                 .set(HUMIDITY, Humidity.NORMAL.toString())
                 .set(WINDY, Windy.FALSE.toString())));
 
-        tally(PlayGolf.NO.toString(), forest.walk(new Feature()
+        tally(PlayGolf.NO.toString(), forest.walk(new FeatureSet()
                 .set(PLAY_GOLF, PlayGolf.NO.toString())
                 .set(OUTLOOK, Outlook.SUNNY.toString())
                 .set(TEMP, Temp.COOL.toString())
                 .set(HUMIDITY, Humidity.NORMAL.toString())
                 .set(WINDY, Windy.TRUE.toString())));
 
-        tally(PlayGolf.YES.toString().toString(), forest.walk(new Feature()
-                .set(PLAY_GOLF, PlayGolf.YES.toString().toString())
+        tally(PlayGolf.YES.toString(), forest.walk(new FeatureSet()
+                .set(PLAY_GOLF, PlayGolf.YES.toString())
                 .set(OUTLOOK, Outlook.OVERCAST.toString())
                 .set(TEMP, Temp.COOL.toString())
                 .set(HUMIDITY, Humidity.NORMAL.toString())
                 .set(WINDY, Windy.TRUE.toString())));
 
-        tally(PlayGolf.NO.toString(), forest.walk(new Feature()
+        tally(PlayGolf.NO.toString(), forest.walk(new FeatureSet()
                 .set(PLAY_GOLF, PlayGolf.NO.toString())
                 .set(OUTLOOK, Outlook.RAINY.toString())
                 .set(TEMP, Temp.MILD.toString())
                 .set(HUMIDITY, Humidity.HIGH.toString())
                 .set(WINDY, Windy.FALSE.toString())));
 
-        tally(PlayGolf.YES.toString().toString(), forest.walk(new Feature()
-                .set(PLAY_GOLF, PlayGolf.YES.toString().toString())
+        tally(PlayGolf.YES.toString(), forest.walk(new FeatureSet()
+                .set(PLAY_GOLF, PlayGolf.YES.toString())
                 .set(OUTLOOK, Outlook.RAINY.toString())
                 .set(TEMP, Temp.COOL.toString())
                 .set(HUMIDITY, Humidity.NORMAL.toString())
                 .set(WINDY, Windy.FALSE.toString())));
 
-        tally(PlayGolf.YES.toString().toString(), forest.walk(new Feature()
-                .set(PLAY_GOLF, PlayGolf.YES.toString().toString())
+        tally(PlayGolf.YES.toString(), forest.walk(new FeatureSet()
+                .set(PLAY_GOLF, PlayGolf.YES.toString())
                 .set(OUTLOOK, Outlook.SUNNY.toString())
                 .set(TEMP, Temp.MILD.toString())
                 .set(HUMIDITY, Humidity.NORMAL.toString())
                 .set(WINDY, Windy.FALSE.toString())));
 
-        tally(PlayGolf.YES.toString().toString(), forest.walk(new Feature()
-                .set(PLAY_GOLF, PlayGolf.YES.toString().toString())
+        tally(PlayGolf.YES.toString(), forest.walk(new FeatureSet()
+                .set(PLAY_GOLF, PlayGolf.YES.toString())
                 .set(OUTLOOK, Outlook.RAINY.toString())
                 .set(TEMP, Temp.MILD.toString())
                 .set(HUMIDITY, Humidity.NORMAL.toString())
                 .set(WINDY, Windy.TRUE.toString())));
 
-        tally(PlayGolf.YES.toString().toString(), forest.walk(new Feature()
-                .set(PLAY_GOLF, PlayGolf.YES.toString().toString())
+        tally(PlayGolf.YES.toString(), forest.walk(new FeatureSet()
+                .set(PLAY_GOLF, PlayGolf.YES.toString())
                 .set(OUTLOOK, Outlook.OVERCAST.toString())
                 .set(TEMP, Temp.MILD.toString())
                 .set(HUMIDITY, Humidity.HIGH.toString())
                 .set(WINDY, Windy.TRUE.toString())));
 
-        tally(PlayGolf.YES.toString().toString(), forest.walk(new Feature()
-                .set(PLAY_GOLF, PlayGolf.YES.toString().toString())
+        tally(PlayGolf.YES.toString(), forest.walk(new FeatureSet()
+                .set(PLAY_GOLF, PlayGolf.YES.toString())
                 .set(OUTLOOK, Outlook.OVERCAST.toString())
                 .set(TEMP, Temp.HOT.toString())
                 .set(HUMIDITY, Humidity.NORMAL.toString())
                 .set(WINDY, Windy.FALSE.toString())));
 
-        tally(PlayGolf.NO.toString(), forest.walk(new Feature()
+        tally(PlayGolf.NO.toString(), forest.walk(new FeatureSet()
                 .set(PLAY_GOLF, PlayGolf.NO.toString())
                 .set(OUTLOOK, Outlook.SUNNY.toString())
                 .set(TEMP, Temp.MILD.toString())
@@ -151,101 +151,101 @@ public class TestRandomForest {
         else { incorrect++; }
     }
 
-    private static List<Feature> loadFeatures() {
-        final List<Feature> features = new ArrayList<>();
+    private static List<FeatureSet> loadFeatures() {
+        final List<FeatureSet> features = new ArrayList<>();
 
-        features.add(new Feature()
+        features.add(new FeatureSet()
             .set(PLAY_GOLF, PlayGolf.NO.toString())
             .set(OUTLOOK, Outlook.RAINY.toString())
             .set(TEMP, Temp.HOT.toString())
             .set(HUMIDITY, Humidity.HIGH.toString())
             .set(WINDY, Windy.FALSE.toString()));
 
-        features.add(new Feature()
+        features.add(new FeatureSet()
                 .set(PLAY_GOLF, PlayGolf.NO.toString())
                 .set(OUTLOOK, Outlook.RAINY.toString())
                 .set(TEMP, Temp.HOT.toString())
                 .set(HUMIDITY, Humidity.HIGH.toString())
                 .set(WINDY, Windy.TRUE.toString()));
 
-        features.add(new Feature()
-                .set(PLAY_GOLF, PlayGolf.YES.toString().toString())
+        features.add(new FeatureSet()
+                .set(PLAY_GOLF, PlayGolf.YES.toString())
                 .set(OUTLOOK, Outlook.OVERCAST.toString())
                 .set(TEMP, Temp.HOT.toString())
                 .set(HUMIDITY, Humidity.HIGH.toString())
                 .set(WINDY, Windy.FALSE.toString()));
 
-        features.add(new Feature()
-                .set(PLAY_GOLF, PlayGolf.YES.toString().toString())
+        features.add(new FeatureSet()
+                .set(PLAY_GOLF, PlayGolf.YES.toString())
                 .set(OUTLOOK, Outlook.SUNNY.toString())
                 .set(TEMP, Temp.MILD.toString())
                 .set(HUMIDITY, Humidity.HIGH.toString())
                 .set(WINDY, Windy.FALSE.toString()));
 
-        features.add(new Feature()
-                .set(PLAY_GOLF, PlayGolf.YES.toString().toString())
+        features.add(new FeatureSet()
+                .set(PLAY_GOLF, PlayGolf.YES.toString())
                 .set(OUTLOOK, Outlook.SUNNY.toString())
                 .set(TEMP, Temp.COOL.toString())
                 .set(HUMIDITY, Humidity.NORMAL.toString())
                 .set(WINDY, Windy.FALSE.toString()));
 
-        features.add(new Feature()
+        features.add(new FeatureSet()
                 .set(PLAY_GOLF, PlayGolf.NO.toString())
                 .set(OUTLOOK, Outlook.SUNNY.toString())
                 .set(TEMP, Temp.COOL.toString())
                 .set(HUMIDITY, Humidity.NORMAL.toString())
                 .set(WINDY, Windy.TRUE.toString()));
 
-        features.add(new Feature()
-                .set(PLAY_GOLF, PlayGolf.YES.toString().toString())
+        features.add(new FeatureSet()
+                .set(PLAY_GOLF, PlayGolf.YES.toString())
                 .set(OUTLOOK, Outlook.OVERCAST.toString())
                 .set(TEMP, Temp.COOL.toString())
                 .set(HUMIDITY, Humidity.NORMAL.toString())
                 .set(WINDY, Windy.TRUE.toString()));
 
-        features.add(new Feature()
+        features.add(new FeatureSet()
                 .set(PLAY_GOLF, PlayGolf.NO.toString())
                 .set(OUTLOOK, Outlook.RAINY.toString())
                 .set(TEMP, Temp.MILD.toString())
                 .set(HUMIDITY, Humidity.HIGH.toString())
                 .set(WINDY, Windy.FALSE.toString()));
 
-        features.add(new Feature()
-                .set(PLAY_GOLF, PlayGolf.YES.toString().toString())
+        features.add(new FeatureSet()
+                .set(PLAY_GOLF, PlayGolf.YES.toString())
                 .set(OUTLOOK, Outlook.RAINY.toString())
                 .set(TEMP, Temp.COOL.toString())
                 .set(HUMIDITY, Humidity.NORMAL.toString())
                 .set(WINDY, Windy.FALSE.toString()));
 
-        features.add(new Feature()
-                .set(PLAY_GOLF, PlayGolf.YES.toString().toString())
+        features.add(new FeatureSet()
+                .set(PLAY_GOLF, PlayGolf.YES.toString())
                 .set(OUTLOOK, Outlook.SUNNY.toString())
                 .set(TEMP, Temp.MILD.toString())
                 .set(HUMIDITY, Humidity.NORMAL.toString())
                 .set(WINDY, Windy.FALSE.toString()));
 
-        features.add(new Feature()
-                .set(PLAY_GOLF, PlayGolf.YES.toString().toString())
+        features.add(new FeatureSet()
+                .set(PLAY_GOLF, PlayGolf.YES.toString())
                 .set(OUTLOOK, Outlook.RAINY.toString())
                 .set(TEMP, Temp.MILD.toString())
                 .set(HUMIDITY, Humidity.NORMAL.toString())
                 .set(WINDY, Windy.TRUE.toString()));
 
-        features.add(new Feature()
-                .set(PLAY_GOLF, PlayGolf.YES.toString().toString())
+        features.add(new FeatureSet()
+                .set(PLAY_GOLF, PlayGolf.YES.toString())
                 .set(OUTLOOK, Outlook.OVERCAST.toString())
                 .set(TEMP, Temp.MILD.toString())
                 .set(HUMIDITY, Humidity.HIGH.toString())
                 .set(WINDY, Windy.TRUE.toString()));
 
-        features.add(new Feature()
-                .set(PLAY_GOLF, PlayGolf.YES.toString().toString())
+        features.add(new FeatureSet()
+                .set(PLAY_GOLF, PlayGolf.YES.toString())
                 .set(OUTLOOK, Outlook.OVERCAST.toString())
                 .set(TEMP, Temp.HOT.toString())
                 .set(HUMIDITY, Humidity.NORMAL.toString())
                 .set(WINDY, Windy.FALSE.toString()));
 
-        features.add(new Feature()
+        features.add(new FeatureSet()
                 .set(PLAY_GOLF, PlayGolf.NO.toString())
                 .set(OUTLOOK, Outlook.SUNNY.toString())
                 .set(TEMP, Temp.MILD.toString())

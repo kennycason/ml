@@ -26,7 +26,7 @@ import java.util.Set;
 /**
  * Created by kenny
  */
-public class TestDataRankTopicDecisionTreeAndForest {
+public class TestDataRankTopicDecisionTreeAndForestAndSVM {
 
     private Set<String> whiteList = new HashSet<>(Arrays.asList(
        "GENDER", "AGE", "SENTIMENT", "DATASOURCE", "DATASOURCE_TYPE", /*"HAS_BIO", */
@@ -35,33 +35,33 @@ public class TestDataRankTopicDecisionTreeAndForest {
             "THEME_PURCHASE_INTENT", "IS_AMAZON"
     ));
 
-    private final String target = "THEME_PURCHASE_INTENT";
+    private final String target = "THEME_PURCHASE_INTENT";  // "IS_AMAZON"; is amazon has a 1-to-1 mapping to datasource so models will learn 100% accuracy.
 
     public void loadFeatures() throws IOException {
         final File apiKeyFile = new File(System.getProperty("user.home") + "/.datarank-api-key");
         final DataRank dataRank = new DataRank(new DataRankConfiguration(IOUtils.toString(new FileInputStream(apiKeyFile)).trim()));
-        final List<Feature> features = DataRankTopicFeatureExtractor.download(dataRank, "tide-pods", 10000);
-        DataRankTopicFeatureExtractor.write(features, "/tmp/tide-pods.csv");
+        final List<FeatureSet> features = DataRankTopicFeatureExtractor.downloadComments(dataRank, "tide-pods", 1000);
+        FeatureLoader.write(features, "/tmp/tide-pods.csv");
     }
 
     @Test
     public void testBoth() throws IOException {
-        // loadFeatures();
+        loadFeatures();
         testDecisionTree();
         testRandomForest();
         testSvm();
     }
 
     private void testDecisionTree() throws IOException {
-        final List<Feature> features = DataRankTopicFeatureExtractor.read("/tmp/tide-pods.csv", whiteList);
+        final List<FeatureSet> features = FeatureLoader.read("/tmp/tide-pods.csv", whiteList);
 
         final DecisionTree decisionTree = new DecisionTree();
         final Tree tree = decisionTree.train(target, features);
 
         int correct = 0;
-        for(Feature feature : features) {
-            final String vote = tree.walk(feature);
-            if(StringUtils.equals(vote, feature.get(target))) {
+        for(FeatureSet featureSet : features) {
+            final String vote = tree.walk(featureSet);
+            if(StringUtils.equals(vote, featureSet.get(target))) {
                 correct++;
             }
         }
@@ -69,16 +69,16 @@ public class TestDataRankTopicDecisionTreeAndForest {
     }
 
     private void testRandomForest() throws IOException {
-        final List<Feature> features = DataRankTopicFeatureExtractor.read("/tmp/tide-pods.csv", whiteList);
+        final List<FeatureSet> features = FeatureLoader.read("/tmp/tide-pods.csv", whiteList);
 
         final RandomForest randomForest = new RandomForest();
         randomForest.numTrees = 25;
         final Forest forest = randomForest.train(target, features);
 
         int correct = 0;
-        for(Feature feature : features) {
-            final String vote = forest.walk(feature);
-            if(StringUtils.equals(vote, feature.get(target))) {
+        for(FeatureSet featureSet : features) {
+            final String vote = forest.walk(featureSet);
+            if(StringUtils.equals(vote, featureSet.get(target))) {
                 correct++;
             }
         }

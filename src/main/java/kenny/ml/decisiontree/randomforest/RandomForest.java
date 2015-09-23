@@ -1,7 +1,7 @@
 package kenny.ml.decisiontree.randomforest;
 
 import kenny.ml.decisiontree.DecisionTree;
-import kenny.ml.decisiontree.Feature;
+import kenny.ml.decisiontree.FeatureSet;
 import kenny.ml.decisiontree.Tree;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class RandomForest {
 
     public int numTrees = 10;
 
-    public Forest train(final String target, final List<Feature> features) {
+    public Forest train(final String target, final List<FeatureSet> features) {
         if(features.isEmpty()) { throw new IllegalArgumentException("There must be at least one feature."); }
 
         final Forest forest = new Forest();
@@ -34,7 +34,7 @@ public class RandomForest {
         return forest;
     }
 
-    private List<Tree> buildTrees(final String target, final List<Feature> features) {
+    private List<Tree> buildTrees(final String target, final List<FeatureSet> features) {
         final List<Tree> trees = new ArrayList<>(numTrees);
 
         for(int i = 0; i < numTrees; i++) {
@@ -48,11 +48,11 @@ public class RandomForest {
      * select a random portion of features
      * first method called, need to clone
      */
-    private List<Feature> sampleFeatures(final List<Feature> features) {
-        final List<Feature> sample = new ArrayList<>();
-        for(Feature feature : features) {
+    private List<FeatureSet> sampleFeatures(final List<FeatureSet> features) {
+        final List<FeatureSet> sample = new ArrayList<>();
+        for(FeatureSet featureSet : features) {
             if(RANDOM.nextDouble() >= featureSampleRate) {
-                sample.add(clone(feature));
+                sample.add(clone(featureSet));
             }
         }
         return sample;
@@ -62,12 +62,12 @@ public class RandomForest {
      * select a random portion of labels
      * method functions on feature clones, no need to clone
      */
-    private List<Feature> sampleLabels(final List<Feature> features, final String target) {
+    private List<FeatureSet> sampleLabels(final List<FeatureSet> features, final String target) {
         for(String label : extractLabels(features)) {
             if(target.equals(label)) { continue; }
 
             if (RANDOM.nextDouble() >= labelSampleRate) {
-                for(Feature feature : features) {
+                for(FeatureSet feature : features) {
                     // must have at least one feature and the target
                     if(feature.features.size() <= 2) { return features; }
 
@@ -78,17 +78,17 @@ public class RandomForest {
         return features;
     }
 
-    private static List<String> extractLabels(final List<Feature> features) {
+    private static List<String> extractLabels(final List<FeatureSet> features) {
         final Set<String> labels = new HashSet<>();
-        for (Feature feature : features) {
+        for (FeatureSet feature : features) {
             labels.addAll(feature.getLabels());
         }
         return new ArrayList<>(labels);
     }
 
-    private static Feature clone(Feature feature) {
-        final Feature clone = new Feature();
-        clone.features.putAll(feature.features);
+    private static FeatureSet clone(FeatureSet featureSet) {
+        final FeatureSet clone = new FeatureSet();
+        clone.features.putAll(featureSet.features);
         return clone;
     }
 

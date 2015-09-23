@@ -3,12 +3,12 @@ package kenny.ml.svm;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CategoryMap<T> {
+public class Categories<T> {
 	Map<T, Integer> oldnew;
 	Map<Integer, T> newold;
 	int lastindex;
 
-	public CategoryMap() {
+	public Categories() {
 		oldnew = new HashMap<>();
 		newold = new HashMap<>();
 		lastindex = -1;
@@ -22,7 +22,7 @@ public class CategoryMap<T> {
 		return oldnew.isEmpty();
 	}
 
-	public void addCategory(T cat) {
+	public void add(T cat) {
 		if (!oldnew.containsKey(cat)) {
 			lastindex++;
 			oldnew.put(cat, lastindex);

@@ -155,7 +155,7 @@ public class NonLinear2DViewer extends Canvas {
 
 	private void drawTrainingData(Graphics2D g) {
 
-		for(int i = 0; i < train.l; i++) {
+		for(int i = 0; i < train.trainingSize; i++) {
 			Color c = Color.RED;
 			char[] text = new char[] {'-', '1'};
 			if(train.y[i] == 1) {

@@ -29,27 +29,27 @@ public class Keethri extends AbstractSequentialMinimalOptimization {
 		int i;
 		// Initialize:
 		model = new Model();
-		model.alpha = new double[train.l];
+		model.alpha = new double[train.trainingSize];
 		model.b = 0;
 		model.params = p;
 		model.x = train.x;
 		model.y = train.y;
-		model.l = train.l;
-		model.n = train.n;
+		model.trainingSize = train.trainingSize;
+		model.featureSize = train.featureSize;
 		// Initialize the sets Ii:
 		I0 = new ArrayList<Integer>();
 		I1 = new ArrayList<Integer>();
 		I2 = new ArrayList<Integer>();
 		I3 = new ArrayList<Integer>();
 		I4 = new ArrayList<Integer>();
-		for (i = 0; i < train.l; i++)
+		for (i = 0; i < train.trainingSize; i++)
 			addtoSet(i, model.alpha[i], model.y[i]);
 		// LinearLibSVMFormatRunner iteration:
 		System.out.println();
 		while (alpha_change > 0 || examineAll == 1) {
 			alpha_change = 0;
 			if (examineAll == 1) {
-				for (i = 0; i < train.l; i++) {
+				for (i = 0; i < train.trainingSize; i++) {
 
 				}
 			} else {

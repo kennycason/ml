@@ -18,25 +18,25 @@ public class Platts extends AbstractSequentialMinimalOptimization {
 		int examineAll = 1;
 		// Initialize:
 		model = new Model();
-		model.alpha = new double[train.l];
+		model.alpha = new double[train.trainingSize];
 		model.b = 0;
 		model.params = p;
 		model.x = train.x;
 		model.y = train.y;
-		model.l = train.l;
-		model.n = train.n;
+		model.trainingSize = train.trainingSize;
+		model.featureSize = train.featureSize;
 		// Initialize error cache E:
-		E = new double[model.l];
-		for (int i = 0; i < model.l; i++)
+		E = new double[model.trainingSize];
+		for (int i = 0; i < model.trainingSize; i++)
 			E[i] = testOne(model.x[i]) - model.y[i];
 		while (numChanged > 0 || examineAll == 1) {
 			numChanged = 0;
 			if (examineAll == 1) {
-				for (int i = 0; i < model.l; i++) {
+				for (int i = 0; i < model.trainingSize; i++) {
 					numChanged += psmoExamineExample(i);
 				}
 			} else {
-				for (int i = 0; i < model.l; i++) {
+				for (int i = 0; i < model.trainingSize; i++) {
 					if (model.alpha[i] > 0 && model.alpha[i] < 0) {
 						numChanged += psmoExamineExample(i);
 					}
@@ -66,7 +66,7 @@ public class Platts extends AbstractSequentialMinimalOptimization {
 		double rj = Ej * yj;
 		if ((rj < -tol && aj_old < model.params.getC()) || (rj > tol && aj_old > 0)) {
 			boolean exists = false;
-			for (int k = 0; k < model.l; k++)
+			for (int k = 0; k < model.trainingSize; k++)
 				if (model.alpha[k] > 0 && model.alpha[k] < model.params.getC()) {
 					exists = true;
 					break;
@@ -75,7 +75,7 @@ public class Platts extends AbstractSequentialMinimalOptimization {
 				// second choice heuristics:
 				int maxind = 0;
 				double maxval = Math.abs(E[0] - Ej);
-				for (int k = 1; k < model.l; k++)
+				for (int k = 1; k < model.trainingSize; k++)
 					if (Math.abs(E[k] - Ej) > maxval) {
 						maxval = Math.abs(E[k] - Ej);
 						maxind = k;
@@ -84,9 +84,9 @@ public class Platts extends AbstractSequentialMinimalOptimization {
 					return 1;
 			}
 			// loop over non-zero & non-C alpha, starting at a random point:
-			randpos = (int) Math.floor(Math.random() * model.l);
+			randpos = (int) Math.floor(Math.random() * model.trainingSize);
 			for (int k = 0; k < model.alpha.length; k++) {
-				i = (randpos + k) % model.l;
+				i = (randpos + k) % model.trainingSize;
 				if (model.alpha[i] > 0 && model.alpha[i] < model.params.getC()) {
 					if (psmoTakeStep(i, j) == 1) {
 						return 1;
@@ -94,9 +94,9 @@ public class Platts extends AbstractSequentialMinimalOptimization {
 				}
 			}
 			// loop over all i, starting at a random point
-			randpos = (int) Math.floor(Math.random() * model.l);
+			randpos = (int) Math.floor(Math.random() * model.trainingSize);
 			for (int k = 0; k < model.alpha.length; k++) {
-				i = (randpos + k) % model.l;
+				i = (randpos + k) % model.trainingSize;
 				if (psmoTakeStep(i, j) == 1) {
 					return 1;
 				}
@@ -167,7 +167,7 @@ public class Platts extends AbstractSequentialMinimalOptimization {
 		computeBias(ai, aj, yi, yj, kii, kjj, kij);
 		model.alpha[i] = ai;
 		model.alpha[j] = aj;
-		for (int k = 0; k < model.l; k++) {
+		for (int k = 0; k < model.trainingSize; k++) {
 			double kik = kernel(model.x[i], model.x[k]);
 			double kjk = kernel(model.x[j], model.x[k]);
 			E[k] += (ai - ai_old) * yi * kik + (aj - aj_old) * yj * kjk - b_old

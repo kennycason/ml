@@ -23,15 +23,15 @@ public class Tree {
         return value != null;
     }
 
-    public String walk(final Feature feature) {
-       return walk(feature, children.get(feature.get(label)));
+    public String walk(final FeatureSet featureSet) {
+       return walk(featureSet, children.get(featureSet.get(label)));
     }
 
-    private static String walk(final Feature feature, final Tree tree) {
+    private static String walk(final FeatureSet featureSet, final Tree tree) {
         if(tree == null) { return null; }
         if(tree.value != null) { return tree.value; }
 
-        return walk(feature, tree.children.get(feature.get(tree.label)));
+        return walk(featureSet, tree.children.get(featureSet.get(tree.label)));
     }
 
     @Override

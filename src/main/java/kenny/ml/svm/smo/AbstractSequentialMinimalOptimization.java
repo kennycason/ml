@@ -129,7 +129,7 @@ public abstract class AbstractSequentialMinimalOptimization {
 	 */
 	public double testOne(FeatureSpace x) {
 		double f = 0;
-		for (int i = 0; i < model.l; i++) {
+		for (int i = 0; i < model.trainingSize; i++) {
 			f += model.alpha[i] * model.y[i] * kernel(x, model.x[i]);
 		}
 		return f + model.b;

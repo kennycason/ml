@@ -30,11 +30,11 @@ public class SimpleProblemLoader implements IProblemLoader {
             // Category:
             Integer cat = Integer.parseInt(elems[0]);
             stringBuilder.append(cat + ": ");
-            problem.catmap.addCategory(cat);
-            if (problem.catmap.size() > 2) {
+            problem.categories.add(cat);
+            if (problem.categories.size() > 2) {
                 throw new IllegalArgumentException("only 2 classes allowed!");
             }
-            classes.add(problem.catmap.getNewCategoryOf(cat));
+            classes.add(problem.categories.getNewCategoryOf(cat));
             // Index/value pairs:
             examples.add(parseRow(elems, stringBuilder));
         }
@@ -44,7 +44,7 @@ public class SimpleProblemLoader implements IProblemLoader {
             problem.x[i] = examples.get(i);
             problem.y[i] = 2 * classes.get(i) - 1; // 0,1 => -1,1
         }
-        problem.l = examples.size();
+        problem.trainingSize = examples.size();
         LOGGER.debug(stringBuilder);
         return problem;
     }

@@ -1,6 +1,6 @@
 package kenny.ml.decisiontree.randomforest;
 
-import kenny.ml.decisiontree.Feature;
+import kenny.ml.decisiontree.FeatureSet;
 import kenny.ml.decisiontree.Tree;
 import org.apache.commons.lang3.mutable.MutableInt;
 
@@ -16,8 +16,8 @@ public class Forest {
 
     public List<Tree> trees = new ArrayList<>();
 
-    public String walk(final Feature feature) {
-        final Map<String, MutableInt> votes = tallyVotes(feature);
+    public String walk(final FeatureSet featureSet) {
+        final Map<String, MutableInt> votes = tallyVotes(featureSet);
         return highestVote(votes);
     }
 
@@ -33,10 +33,10 @@ public class Forest {
         return highestVote;
     }
 
-    private Map<String, MutableInt> tallyVotes(final Feature feature) {
+    private Map<String, MutableInt> tallyVotes(final FeatureSet featureSet) {
         final Map<String, MutableInt> votes = new HashMap<>();
         for(Tree tree : trees) {
-            final String vote = tree.walk(feature);
+            final String vote = tree.walk(featureSet);
             if(!votes.containsKey(vote)) {
                 votes.put(vote, new MutableInt());
             }

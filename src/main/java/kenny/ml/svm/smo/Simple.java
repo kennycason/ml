@@ -30,21 +30,21 @@ public class Simple extends AbstractSequentialMinimalOptimization {
 		double eta;
 		// Initialize:
 		model = new Model();
-		model.alpha = new double[train.l];
+		model.alpha = new double[train.trainingSize];
 		model.b = 0;
 		model.params = p;
 		model.x = train.x;
 		model.y = train.y;
-		model.l = train.l;
-		model.n = train.n;
+		model.trainingSize = train.trainingSize;
+		model.featureSize = train.featureSize;
 		// LinearLibSVMFormatRunner iteration:
 		while (pass < maxPass) {
 			alpha_change = 0;
-			for (i = 0; i < train.l; i++) {
+			for (i = 0; i < train.trainingSize; i++) {
 				Ei = testOne(train.x[i]) - train.y[i];
 				if ((train.y[i] * Ei < -tol && model.alpha[i] < model.params.getC()) 
 						|| (train.y[i] * Ei > tol && model.alpha[i] > 0)) {
-					j = (int) Math.floor(Math.random() * (train.l - 1));
+					j = (int) Math.floor(Math.random() * (train.trainingSize - 1));
 					j = (j < i) ? j : (j + 1);
 					Ej = testOne(train.x[j]) - train.y[j];
 					ai_old = model.alpha[i];

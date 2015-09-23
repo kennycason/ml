@@ -39,47 +39,47 @@ public class TestVoteData {
 
     @Test
     public void partyTest() throws IOException {
-        final List<Feature> train = loadFeatures("kenny/ml/decisiontree/vote.data");
-        final List<Feature> test = loadFeatures("kenny/ml/decisiontree/vote.test");
+        final List<FeatureSet> train = loadFeatures("kenny/ml/decisiontree/vote.data");
+        final List<FeatureSet> test = loadFeatures("kenny/ml/decisiontree/vote.test");
 
         testDecisionTree(train, test);
         testRandomForest(train, test);
     }
 
-    private void testDecisionTree(final List<Feature> train, final List<Feature> test) {
+    private void testDecisionTree(final List<FeatureSet> train, final List<FeatureSet> test) {
         final DecisionTree decisionTree = new DecisionTree();
         final Tree tree = decisionTree.train(TARGET, train);
 
         int correct = 0;
-        for(Feature feature : test) {
-            final String vote = tree.walk(feature);
-            if(StringUtils.equals(vote, feature.get(TARGET))) {
+        for(FeatureSet featureSet : test) {
+            final String vote = tree.walk(featureSet);
+            if(StringUtils.equals(vote, featureSet.get(TARGET))) {
                 correct++;
             }
         }
         System.out.println("Decision Tree: " + ((double) correct / test.size() * 100.0) + "% correct");
     }
 
-    private void testRandomForest(final List<Feature> train, final List<Feature> test) {
+    private void testRandomForest(final List<FeatureSet> train, final List<FeatureSet> test) {
         final RandomForest randomForest = new RandomForest();
         randomForest.numTrees = 25;
         final Forest forest = randomForest.train(TARGET, train);
 
         int correct = 0;
-        for(Feature feature : test) {
-            final String vote = forest.walk(feature);
-            if(StringUtils.equals(vote, feature.get(TARGET))) {
+        for(FeatureSet featureSet : test) {
+            final String vote = forest.walk(featureSet);
+            if(StringUtils.equals(vote, featureSet.get(TARGET))) {
                 correct++;
             }
         }
         System.out.println("Random Forest: " + ((double) correct / test.size() * 100.0) + "% correct");
     }
 
-    private List<Feature> loadFeatures(final String resource) throws IOException {
-        final List<Feature> features = new ArrayList<>();
+    private List<FeatureSet> loadFeatures(final String resource) throws IOException {
+        final List<FeatureSet> features = new ArrayList<>();
         final List<String> lines = IOUtils.readLines(Thread.currentThread().getContextClassLoader().getResourceAsStream(resource));
         for(String line : lines) {
-            final Feature feature = new Feature();
+            final FeatureSet feature = new FeatureSet();
             for (int i = 0; i < FEATURES.length; i++) {
                 final String[] attributes = line.split(",");
                 feature.set(FEATURES[i], attributes[i]);
