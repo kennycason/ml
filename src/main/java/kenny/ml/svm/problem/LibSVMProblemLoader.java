@@ -56,7 +56,7 @@ public class LibSVMProblemLoader implements IProblemLoader {
      * @return The corresponding FeatureSpace.
      */
     private FeatureSpace parseRow(String[] row) {
-        FeatureSpace example = new FeatureSpace(row.length - 1);
+        FeatureSpace example = new FeatureSpace();
 
         for (int i = 1; i < row.length; i++) {
             //	if(row[i].length() > 0) { // in case double space used

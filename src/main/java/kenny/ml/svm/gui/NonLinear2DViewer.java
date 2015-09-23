@@ -133,7 +133,7 @@ public class NonLinear2DViewer extends Canvas {
 		// draw
 		for (int y = -dim; y < dim; y++) {
 			for (int x = -dim; x < dim; x++) {
-				int result = (svm.testOne(new FeatureSpace(2, x, y)) < 0 ? -1 : 1);
+				int result = (svm.testOne(new FeatureSpace(x, y)) < 0 ? -1 : 1);
 			//	System.out.println("(" + x + ", " + y + ") => " + svm.testOne(new FeatureSpace(2, x, y)));
 				if(result == 1) {
 					drawSquare(x + dim, y + dim, Color.WHITE, g);

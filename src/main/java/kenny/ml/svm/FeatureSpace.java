@@ -7,7 +7,7 @@ public class FeatureSpace extends SparseVector {
 
 	public FeatureSpace(double ... values) {
 		super(0);
-		for(int i = 0; i < size && i < values.length; i++) {
+		for(int i = 0; i < values.length; i++) {
 			set(i, values[i]);
 		}
 	}

@@ -55,7 +55,7 @@ public class SimpleProblemLoader implements IProblemLoader {
      * @return The corresponding FeatureSpace.
      */
     private FeatureSpace parseRow(String[] row, final StringBuilder stringBuilder) {
-        FeatureSpace example = new FeatureSpace(row.length - 1);
+        FeatureSpace example = new FeatureSpace();
         for (int i = 1; i < row.length; i++) {
             stringBuilder.append(row[i]).append(' ');
             double value = Double.parseDouble(row[i]);
