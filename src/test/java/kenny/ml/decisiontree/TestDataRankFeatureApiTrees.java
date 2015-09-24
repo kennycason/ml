@@ -3,6 +3,7 @@ package kenny.ml.decisiontree;
 import com.datarank.api.DataRank;
 import com.datarank.api.config.DataRankConfiguration;
 import com.datarank.api.request.filters.FeatureMode;
+import com.datarank.api.request.filters.Limit;
 import com.datarank.api.response.envelopes.CommentFeaturesEnvelope;
 import kenny.ml.decisiontree.randomforest.Forest;
 import kenny.ml.decisiontree.randomforest.RandomForest;
@@ -24,17 +25,24 @@ public class TestDataRankFeatureApiTrees {
     private final String target = "THEME PURCHASE INTENT";
 
     @Test
-    public void testBoth() throws IOException {
-        final CommentFeaturesEnvelope commentFeaturesEnvelope = loadFeatures(2500);
-        final List<FeatureSet> features = buidDecisionTreeFeatures(commentFeaturesEnvelope);
-        testDecisionTree(features);
-        testRandomForest(features);
+    public void testRoot() throws IOException {
+        // initialize datarank SDK
+        final File apiKeyFile = new File(System.getProperty("user.home") + "/.datarank-api-key");
+        final DataRank dataRank = new DataRank(new DataRankConfiguration(IOUtils.toString(new FileInputStream(apiKeyFile)).trim()));
+        // perform api call to return 1000 categorical features
+        final CommentFeaturesEnvelope commentFeatures = dataRank.commentsFeatures("tide-pods", new Limit(1000), FeatureMode.CATEGORY).getBody();
+        // perform lightweight transforms to build decision tree features
+        final List<FeatureSet> features = buidDecisionTreeFeatures(commentFeatures);
+
+        trainDecisionTree(features);
+        trainRandomForest(features);
     }
 
-    private void testDecisionTree(final List<FeatureSet> features) throws IOException {
+    private void trainDecisionTree(final List<FeatureSet> features) {
         final DecisionTree decisionTree = new DecisionTree();
         final Tree tree = decisionTree.train(target, features);
 
+        // measure accuracy of learned train data
         int correct = 0;
         for(FeatureSet featureSet : features) {
             final String vote = tree.walk(featureSet);
@@ -45,11 +53,12 @@ public class TestDataRankFeatureApiTrees {
         System.out.println("Decision Tree: " + ((double) correct / features.size() * 100.0) + "% correct");
     }
 
-    private void testRandomForest(final List<FeatureSet> features) throws IOException {
+    private void trainRandomForest(final List<FeatureSet> features) {
         final RandomForest randomForest = new RandomForest();
         randomForest.numTrees = 25;
         final Forest forest = randomForest.train(target, features);
 
+        // measure accuracy of learned train data
         int correct = 0;
         for(FeatureSet featureSet : features) {
             final String vote = forest.walk(featureSet);
@@ -70,12 +79,6 @@ public class TestDataRankFeatureApiTrees {
             formattedFeatures.add(featureSet);
         }
         return formattedFeatures;
-    }
-
-    private CommentFeaturesEnvelope loadFeatures(final int size) throws IOException {
-        final File apiKeyFile = new File(System.getProperty("user.home") + "/.datarank-api-key");
-        final DataRank dataRank = new DataRank(new DataRankConfiguration(IOUtils.toString(new FileInputStream(apiKeyFile)).trim()));
-        return DataRankTopicFeatureExtractor.downloadFeatures(dataRank, "tide-pods", size, FeatureMode.CATEGORY);
     }
 
 }

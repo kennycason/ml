@@ -3,8 +3,8 @@ package kenny.ml.svm;
 import com.datarank.api.DataRank;
 import com.datarank.api.config.DataRankConfiguration;
 import com.datarank.api.request.filters.FeatureMode;
+import com.datarank.api.request.filters.Limit;
 import com.datarank.api.response.envelopes.CommentFeaturesEnvelope;
-import kenny.ml.decisiontree.DataRankTopicFeatureExtractor;
 import kenny.ml.svm.kernels.Gaussian;
 import kenny.ml.svm.kernels.IKernel;
 import kenny.ml.svm.problem.Problem;
@@ -30,9 +30,15 @@ public class TestDataRankFeatureApiSVM {
      * Support Vector Machine: 96.08%
      */
     @Test
-    public void testSvm() throws IOException {
-        final CommentFeaturesEnvelope commentFeaturesEnvelope = loadFeatures(2500);
-        final Problem problem = buildModel(commentFeaturesEnvelope);
+    public void trainSvm() throws IOException {
+        // initialize datarank SDK
+        final File apiKeyFile = new File(System.getProperty("user.home") + "/.datarank-api-key");
+        final DataRank dataRank = new DataRank(new DataRankConfiguration(IOUtils.toString(new FileInputStream(apiKeyFile)).trim()));
+        // perform api call to return 1000 categorical features
+        final CommentFeaturesEnvelope commentFeatures = dataRank.commentsFeatures("tide-pods", new Limit(1000), FeatureMode.NUMERIC).getBody();
+
+        // perform lightweight transforms to build decision tree features
+        final Problem problem = buildModel(commentFeatures);
 
         final SupportVectorMachine supportVectorMachine = new SupportVectorMachine();
 
@@ -48,6 +54,7 @@ public class TestDataRankFeatureApiSVM {
         System.out.println("Support Vector Machine: " + (evalMeasures.accuracy() * 100.0) + "%");
     }
 
+    // build model, remove the target variable from the training features
     private Problem buildModel(final CommentFeaturesEnvelope commentFeaturesEnvelope) {
         final int targetIndex = findTargetIndex(target, commentFeaturesEnvelope.getFeatureNames());
         final Problem problem = new Problem();
@@ -60,7 +67,7 @@ public class TestDataRankFeatureApiSVM {
         int i = 0;
         for(List<String> featureSet : commentFeaturesEnvelope.getFeatures()) {
             problem.y[i] = Integer.valueOf(featureSet.get(targetIndex));
-            featureSet.remove(targetIndex);
+            featureSet.remove(targetIndex); // remove the target variable from the data
             int j = 0;
             final FeatureSpace featureSpace = new FeatureSpace();
             for(String feature : featureSet) {
@@ -79,12 +86,6 @@ public class TestDataRankFeatureApiSVM {
             i++;
         }
         return -1;
-    }
-
-    private CommentFeaturesEnvelope loadFeatures(final int size) throws IOException {
-        final File apiKeyFile = new File(System.getProperty("user.home") + "/.datarank-api-key");
-        final DataRank dataRank = new DataRank(new DataRankConfiguration(IOUtils.toString(new FileInputStream(apiKeyFile)).trim()));
-        return DataRankTopicFeatureExtractor.downloadFeatures(dataRank, "tide-pods", size, FeatureMode.CONTINUOUS);
     }
 
 }

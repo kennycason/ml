@@ -2,11 +2,9 @@ package kenny.ml.decisiontree;
 
 import ch.lambdaj.Lambda;
 import com.datarank.api.DataRank;
-import com.datarank.api.request.filters.FeatureMode;
 import com.datarank.api.request.filters.Gender;
 import com.datarank.api.request.filters.Limit;
 import com.datarank.api.response.containers.Comment;
-import com.datarank.api.response.envelopes.CommentFeaturesEnvelope;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,15 +27,6 @@ public class DataRankTopicFeatureExtractor {
 
         System.out.println("Finished loading a total of [" + features.size() + "] features");
         return features;
-    }
-
-    public static CommentFeaturesEnvelope downloadFeatures(final DataRank dataRank, final String slug, final int max, final FeatureMode featureMode) {
-        System.out.println("Loading features for [" + slug + "]");
-
-        final CommentFeaturesEnvelope commentFeaturesEnvelope = dataRank.commentsFeatures(slug, new Limit(max), featureMode).getBody();
-        System.out.println("Loaded [" + commentFeaturesEnvelope.getFeatureNames().size() + "] features for " + commentFeaturesEnvelope.getFeatures().size() + " comments.");
-
-        return commentFeaturesEnvelope;
     }
 
     private static List<FeatureSet> buildFeatures(final List<Comment> comments) {
