@@ -1,5 +1,7 @@
 package kenny.ml.regression.linear;
 
+import kenny.ml.math.Line;
+
 /**
  * Created by kenny
  */
@@ -33,7 +35,7 @@ public class LinearRegression {
         final double standardDeviationY = standardDeviation(points, meanY, 1);
         final double coefficientOfDetermination = Math.pow(((1.0 / points.length) * sumDeltaMeansCorrelation) / (standardDeviationX * standardDeviationY), 2);
 
-        return new LinearModel(b1, b0, coefficientOfDetermination);
+        return new LinearModel(new Line(b1, b0), coefficientOfDetermination);
     }
 
     private static double standardDeviation(final double[][] points, final double mean, final int index) {

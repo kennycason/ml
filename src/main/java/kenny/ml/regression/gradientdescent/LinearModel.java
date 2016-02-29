@@ -1,4 +1,4 @@
-package kenny.ml.regression.linear;
+package kenny.ml.regression.gradientdescent;
 
 import kenny.ml.math.Line;
 
@@ -7,15 +7,11 @@ import kenny.ml.math.Line;
  */
 public class LinearModel {
     public final Line line;
-    public final double coefficientOfDetermination;
+    public final double error;
 
-    public LinearModel(final Line line) {
-        this(line, 0.0);
-    }
-
-    public LinearModel(final Line line, final double coefficientOfDetermination) {
+    public LinearModel(final Line line, final double error) {
         this.line = line;
-        this.coefficientOfDetermination = coefficientOfDetermination;
+        this.error = error;
     }
 
     public Line getLine() {
@@ -38,11 +34,15 @@ public class LinearModel {
         return line.f(x);
     }
 
+    public double getError() {
+        return error;
+    }
+
     @Override
     public String toString() {
         return "LinearModel{" +
                 "line=" + line +
-                ", coefficientOfDetermination=" + coefficientOfDetermination +
+                ", error=" + error +
                 '}';
     }
 

@@ -22,8 +22,8 @@ public class TestLinearRegression {
         };
 
         final LinearModel linearModel = LINEAR_REGRESSION.regress(grades);
-        assertEquals(1.0, linearModel.slope, DELTA);
-        assertEquals(0.0, linearModel.yIntercept, DELTA);
+        assertEquals(1.0, linearModel.getLine().getSlope(), DELTA);
+        assertEquals(0.0, linearModel.getLine().getyIntercept(), DELTA);
         assertEquals(1.0, linearModel.coefficientOfDetermination, DELTA);
     }
 
@@ -38,8 +38,8 @@ public class TestLinearRegression {
         };
 
         final LinearModel linearModel = LINEAR_REGRESSION.regress(grades);
-        assertEquals(0.64, linearModel.slope, DELTA);
-        assertEquals(26.78, linearModel.yIntercept, DELTA);
+        assertEquals(0.64, linearModel.getLine().getSlope(), DELTA);
+        assertEquals(26.78, linearModel.getLine().getyIntercept(), DELTA);
         assertEquals(0.48, linearModel.coefficientOfDetermination, DELTA);
     }
 

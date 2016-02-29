@@ -33,7 +33,7 @@ public class TestRegressionCarMpg {
         final LinearModel linearModel = LINEAR_REGRESSION.regress(data);
         LOGGER.info(linearModel);
 
-        assertEquals(-0.007, linearModel.slope, DELTA);
+        assertEquals(-0.007, linearModel.getLine().getSlope(), DELTA);
         assertEquals(33.65, linearModel.predict(1649), DELTA);
         assertEquals(26.69, linearModel.predict(2556), DELTA);
         assertEquals(7.95, linearModel.predict(4997), DELTA);

@@ -47,8 +47,8 @@ public class TestLocalRegression {
         };
 
         final LinearModel linearModel = LINEAR_REGRESSION.regress(grades);
-        assertEquals(0.64, linearModel.slope, DELTA);
-        assertEquals(26.78, linearModel.yIntercept, DELTA);
+        assertEquals(0.64, linearModel.getLine().getSlope(), DELTA);
+        assertEquals(26.78, linearModel.getLine().getyIntercept(), DELTA);
         assertEquals(0.48, linearModel.coefficientOfDetermination, DELTA);
 
         final int dx = 15;
@@ -58,8 +58,8 @@ public class TestLocalRegression {
 
         assertEquals(82.14,localRegressionModel.predict(85), DELTA);
         // slopes are obviously off due to local errors
-        assertEquals(0.0, localRegressionModel.localRegressions.get(0).slope, DELTA);
-        assertEquals(0.71, localRegressionModel.localRegressions.get(1).slope, DELTA);
+        assertEquals(0.0, localRegressionModel.localRegressions.get(0).getLine().getSlope(), DELTA);
+        assertEquals(0.71, localRegressionModel.localRegressions.get(1).getLine().getSlope(), DELTA);
     }
 
 }
