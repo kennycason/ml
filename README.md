@@ -8,6 +8,7 @@ The goal will be to refactor and unify common classes as well as provide more do
 
 Supports:
 
+- Linear Gradient Descent
 - Back-Error Propagation Neural Network
 - Bayesian filters
 - Clustering algorithms
