@@ -51,7 +51,7 @@ public class LinearRegression {
         return sumDeltaSquares;
     }
 
-    private static double mean(final double[][] points, int index) {
+    private static double mean(final double[][] points, final int index) {
         double sum = 0.0;
         for(double[] point : points) {
             sum += point[index];

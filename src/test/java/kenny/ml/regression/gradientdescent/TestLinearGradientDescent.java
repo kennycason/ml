@@ -9,13 +9,9 @@ import static org.junit.Assert.assertEquals;
  * Created by kenny
  */
 public class TestLinearGradientDescent {
-
     private static final LinearGradientDescent LINEAR_GRADIENT_DESCENT = new LinearGradientDescent();
-
     private static final double LEARNING_RATE = 0.001;
-
     private static final int ITERATIONS = 5000;
-
     private static final double LINE_DELTA = 0.002;
     private static final double GRADES_DELTA = 0.2;
 

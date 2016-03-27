@@ -2,6 +2,8 @@ package kenny.ml.regression.nonlinear;
 
 import kenny.ml.regression.linear.LinearRegression;
 import kenny.ml.regression.linear.LinearModel;
+import kenny.ml.regression.nonlinear.local.LocalRegression;
+import kenny.ml.regression.nonlinear.local.LocalRegressionModel;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

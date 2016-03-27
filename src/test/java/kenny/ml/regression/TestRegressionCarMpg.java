@@ -2,8 +2,8 @@ package kenny.ml.regression;
 
 import kenny.ml.regression.linear.LinearModel;
 import kenny.ml.regression.linear.LinearRegression;
-import kenny.ml.regression.nonlinear.LocalRegression;
-import kenny.ml.regression.nonlinear.LocalRegressionModel;
+import kenny.ml.regression.nonlinear.local.LocalRegression;
+import kenny.ml.regression.nonlinear.local.LocalRegressionModel;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.junit.Test;

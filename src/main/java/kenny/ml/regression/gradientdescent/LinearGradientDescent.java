@@ -70,8 +70,10 @@ public class LinearGradientDescent {
     //      = 1/N ∑(- 2yx + 2mx^2 + 2bx)
     //      = 1/N ∑(- 2x (y - mx - b))
     // ∂/∂m = 2/N ∑(- x (y - mx - b)
-    private double computeErrorDerivativeRespectToSlope(final double[] point, final double slope,
-                                                        final double yIntercept, final double n) {
+    private double computeErrorDerivativeRespectToSlope(final double[] point,
+                                                        final double slope,
+                                                        final double yIntercept,
+                                                        final double n) {
         final double x = point[0];
         final double y = point[1];
         return (2 / n) * -x * (y - slope * x - yIntercept);
@@ -81,8 +83,10 @@ public class LinearGradientDescent {
     // ∂/∂b = 1/N ∑(- 2y + 2mx + 2b)
     //      = 2/N ∑(-y + mx + b)
     //      = 2/N ∑-(y - mx - b)
-    private double computeErrorDerivativeRespectToYIntercept(final double[] point, final double slope,
-                                                             final double yIntercept, final double n) {
+    private double computeErrorDerivativeRespectToYIntercept(final double[] point,
+                                                             final double slope,
+                                                             final double yIntercept,
+                                                             final double n) {
         final double x = point[0];
         final double y = point[1];
         return (2 / n) * -(y - slope * x - yIntercept);

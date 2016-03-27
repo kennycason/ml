@@ -1,4 +1,4 @@
-package kenny.ml.regression.nonlinear;
+package kenny.ml.regression.nonlinear.local;
 
 import kenny.ml.regression.linear.LinearRegression;
 import kenny.ml.regression.linear.LinearModel;
