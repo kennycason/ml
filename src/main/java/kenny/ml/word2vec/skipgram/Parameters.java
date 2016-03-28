@@ -1,4 +1,4 @@
-package kenny.ml.word2vec;
+package kenny.ml.word2vec.skipgram;
 
 /**
  * Created by kenny on 3/27/16.

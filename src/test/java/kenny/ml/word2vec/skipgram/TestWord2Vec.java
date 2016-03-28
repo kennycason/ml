@@ -1,4 +1,4 @@
-package kenny.ml.word2vec;
+package kenny.ml.word2vec.skipgram;
 
 import org.junit.Test;
 
