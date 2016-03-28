@@ -85,6 +85,11 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>org.eclipse.collections</groupId>
+            <artifactId>eclipse-collections</artifactId>
+            <version>7.0.2</version>
+        </dependency>
 
         <!-- Testing -->
         <dependency>
