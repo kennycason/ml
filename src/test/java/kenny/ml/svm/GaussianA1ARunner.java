@@ -1,7 +1,7 @@
 package kenny.ml.svm;
 
 import kenny.ml.svm.kernels.Gaussian;
-import kenny.ml.svm.problem.IProblemLoader;
+import kenny.ml.svm.problem.ProblemLoader;
 import kenny.ml.svm.problem.LibSVMProblemLoader;
 import kenny.ml.svm.problem.Problem;
 import org.junit.Test;
@@ -14,7 +14,7 @@ public class GaussianA1ARunner {
 	public void runTest() throws IOException {
 		SupportVectorMachine svm = new SupportVectorMachine();
 
-		IProblemLoader loader = new LibSVMProblemLoader();
+		ProblemLoader loader = new LibSVMProblemLoader();
 		
 		Problem train = loader.load("kenny/ml/svm/libsvm/a1a_train.libsvm");
 		Problem test = loader.load("kenny/ml/svm/libsvm/a1a_test.libsvm");

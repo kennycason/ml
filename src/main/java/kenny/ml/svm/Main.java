@@ -7,7 +7,7 @@ import kenny.ml.svm.kernels.Linear;
 import kenny.ml.svm.kernels.Polynomial;
 import kenny.ml.svm.kernels.Tanh;
 import kenny.ml.svm.lib.Arguments;
-import kenny.ml.svm.problem.IProblemLoader;
+import kenny.ml.svm.problem.ProblemLoader;
 import kenny.ml.svm.problem.LibSVMProblemLoader;
 import kenny.ml.svm.problem.Problem;
 import kenny.ml.svm.problem.SimpleProblemLoader;
@@ -30,7 +30,7 @@ public class Main {
 			arg.set("test", arg.get("train"));
 		}
 		
-		IProblemLoader loader;
+		ProblemLoader loader;
 		if("libsvm".equalsIgnoreCase(arg.get("format"))) {
 			loader = new LibSVMProblemLoader();
 		} else {

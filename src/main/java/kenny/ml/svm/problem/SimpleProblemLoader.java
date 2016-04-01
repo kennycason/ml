@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class SimpleProblemLoader implements IProblemLoader {
+public class SimpleProblemLoader implements ProblemLoader {
 
     private static final Logger LOGGER = Logger.getLogger(SimpleProblemLoader.class);
 

@@ -1,7 +1,7 @@
 package kenny.ml.svm;
 
 import kenny.ml.svm.kernels.Polynomial;
-import kenny.ml.svm.problem.IProblemLoader;
+import kenny.ml.svm.problem.ProblemLoader;
 import kenny.ml.svm.problem.Problem;
 import kenny.ml.svm.problem.SimpleProblemLoader;
 import org.junit.Test;
@@ -14,7 +14,7 @@ public class LinearRunner {
 	public void runTest() throws IOException {
 		SupportVectorMachine svm = new SupportVectorMachine();
 
-		IProblemLoader loader = new SimpleProblemLoader();
+		ProblemLoader loader = new SimpleProblemLoader();
 		
 		Problem train = loader.load("kenny/ml/svm/linear_train.svm");
 		Problem test = loader.load("kenny/ml/svm/linear_test.svm");

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class LibSVMProblemLoader implements IProblemLoader {
+public class LibSVMProblemLoader implements ProblemLoader {
 
     /**
      * Loads a binary problem from file, i.e. having 2 classes.

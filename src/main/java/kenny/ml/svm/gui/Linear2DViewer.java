@@ -6,7 +6,7 @@ import kenny.ml.svm.KernelParams;
 import kenny.ml.svm.SupportVectorMachine;
 import kenny.ml.svm.kernels.IKernel;
 import kenny.ml.svm.kernels.Linear;
-import kenny.ml.svm.problem.IProblemLoader;
+import kenny.ml.svm.problem.ProblemLoader;
 import kenny.ml.svm.problem.Problem;
 import kenny.ml.svm.problem.SimpleProblemLoader;
 
@@ -98,7 +98,7 @@ public class Linear2DViewer extends Canvas {
 		IKernel k;
 		KernelParams kp;
 
-		IProblemLoader loader = new SimpleProblemLoader();
+		ProblemLoader loader = new SimpleProblemLoader();
 		
 		train = loader.load("kenny/ml/svm/linear_train.svm");
 		test = loader.load("kenny/ml/svm/linear_test.svm");

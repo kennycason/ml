@@ -3,10 +3,7 @@ package kenny.ml.svm;
 import kenny.ml.svm.problem.Problem;
 
 public class EvalMeasures {
-	
-	double[] tp;
-	double[] fp;
-	double[] fn;
+
 	Problem p;
 	int[] predicted;
 	int catnum;
