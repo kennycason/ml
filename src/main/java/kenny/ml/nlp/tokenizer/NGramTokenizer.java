@@ -8,6 +8,14 @@ import java.util.List;
  */
 public class NGramTokenizer {
 
+    public List<String> tokenizeCommulative(List<String> tokensList, int n) {
+        final List<String> tokens = new ArrayList<>();
+        for (int i = 2; i <= n; i++) {
+            tokens.addAll(tokenize(tokensList, i));
+        }
+        return tokens;
+    }
+
     public List<String> tokenize(final String text, int n, final WordTokenizer wordTokenizer) {
         final List<String> tokensList = wordTokenizer.tokenize(text);
         final String[] tokens = tokensList.toArray(new String[tokensList.size()]);

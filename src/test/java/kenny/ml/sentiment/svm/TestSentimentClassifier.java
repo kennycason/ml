@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by kenny on 3/28/16.
  */
-public class SentimentClassifier {
+public class TestSentimentClassifier {
     private static final int WORD_VECTOR_DIMENSIONS = 300;
     private static final WordTokenizer WORD_TOKENIZER = new WhiteSpaceWordTokenizer();
     private final SupportVectorMachine svm = new SupportVectorMachine();
@@ -29,7 +29,7 @@ public class SentimentClassifier {
     private MutableMap<String, double[]> wordVectors;
 
     public static void main(final String[] args) throws IOException {
-        new SentimentClassifier().load();
+        new TestSentimentClassifier().load();
     }
 
     public void load() throws IOException {
@@ -46,8 +46,8 @@ public class SentimentClassifier {
         System.out.println("Test: Loaded " + originalImdbData.test.positive.size() + " positive reviews and " + originalImdbData.test.negative.size() + " negative reviews");
 
         // only take first N data for training
-        final RichIterable<String> positive = sentenceTokenizedImdbData.train.positive.take(100);
-        final RichIterable<String> negative = sentenceTokenizedImdbData.train.negative.take(100);
+        final RichIterable<String> positive = sentenceTokenizedImdbData.train.positive.take(500);
+        final RichIterable<String> negative = sentenceTokenizedImdbData.train.negative.take(500);
         sentenceTokenizedImdbData.train.positive.clear();
         sentenceTokenizedImdbData.train.positive.addAllIterable(positive);
         sentenceTokenizedImdbData.train.negative.clear();
