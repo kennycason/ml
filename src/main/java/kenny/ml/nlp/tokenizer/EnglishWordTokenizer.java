@@ -14,11 +14,10 @@ import java.util.List;
 public class EnglishWordTokenizer implements WordTokenizer {
 
     @Override
-    public List<String> tokenize(String sentence) {
+    public List<String> tokenize(final String sentence) {
         final PTBTokenizer<CoreLabel> ptbt = new PTBTokenizer(new StringReader(sentence), new CoreLabelTokenFactory(), "");
         final List<String> words = new ArrayList<>();
-        for(CoreLabel word : ptbt.tokenize()) {
-
+        for(final CoreLabel word : ptbt.tokenize()) {
             words.add(word.word());
         }
         return words;

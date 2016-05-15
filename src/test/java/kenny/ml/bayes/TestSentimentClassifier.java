@@ -14,8 +14,9 @@ import java.util.HashSet;
  * Created by kenny on 4/1/16.
  */
 public class TestSentimentClassifier {
+
     @Test
-    public void test() throws IOException {
+    public void testSingle() throws IOException {
         final ImdbData imdbData = ImdbLoader.load("/Users/kenny/Downloads/aclImdb/");
         System.out.println("Train: Loaded " + imdbData.train.positive.size() + " positive reviews and " + imdbData.train.negative.size() + " negative reviews");
         System.out.println("Test: Loaded " + imdbData.test.positive.size() + " positive reviews and " + imdbData.test.negative.size() + " negative reviews");
@@ -23,14 +24,13 @@ public class TestSentimentClassifier {
         final long start = System.currentTimeMillis();
         // Create a new SpamFilter Object
         final NaiveBayesianFilter filter = new NaiveBayesianFilter();
-        filter.setCommulativeNGrams(true);
+        filter.setCumulativeNGrams(true);
         filter.setnGrams(3);
+        filter.setInterestingNGrams(25);
         filter.setStopWords(new HashSet<>(ResourceLoader.toLines("kenny/ml/bayes/SPAM_WORDS.txt")));
         filter.setTokenNormalizers(Arrays.asList(String::toLowerCase));
 
-        // Train spam with a file of spam e-mails
         filter.trainNegative(imdbData.train.negative.makeString(" "));
-        // Train spam with a file of regular e-mails
         filter.trainPositive(imdbData.train.positive.makeString(" "));
         // We are finished adding words so finalize the results
         filter.finalizeTraining();
@@ -46,7 +46,28 @@ public class TestSentimentClassifier {
         evaluate(filter, imdbData.test.negative, 0.0f, threshold);
     }
 
-    private static void evaluate(final NaiveBayesianFilter filter, final RichIterable<String> samples, final float expected, final float threshold) {
+    @Test
+    public void testRandom() throws IOException {
+        final ImdbData imdbData = ImdbLoader.load("/Users/kenny/Downloads/aclImdb/");
+        System.out.println("Train: Loaded " + imdbData.train.positive.size() + " positive reviews and " + imdbData.train.negative.size() + " negative reviews");
+        System.out.println("Test: Loaded " + imdbData.test.positive.size() + " positive reviews and " + imdbData.test.negative.size() + " negative reviews");
+
+        final long start = System.currentTimeMillis();
+        // Create a new SpamFilter Object
+        final RandomBayesianFilter filter = new RandomBayesianFilter(10, imdbData.train.positive, imdbData.train.negative);
+        System.out.println((System.currentTimeMillis() - start) + "ms");
+
+        final float threshold = 0.1f;
+        System.out.println("Training Data Results");
+        evaluate(filter, imdbData.train.positive, 1.0f, threshold);
+        evaluate(filter, imdbData.train.negative, 0.0f, threshold);
+
+        System.out.println("Test Data Results");
+        evaluate(filter, imdbData.test.positive, 1.0f, threshold);
+        evaluate(filter, imdbData.test.negative, 0.0f, threshold);
+    }
+
+    private static void evaluate(final BayesianFilter filter, final RichIterable<String> samples, final float expected, final float threshold) {
         int correct = 0;
         int wrong = 0;
         for (final String sample : samples) {
@@ -59,6 +80,6 @@ public class TestSentimentClassifier {
         }
 
         System.out.println("correct: " + correct + ", wrong: " + wrong + ", undecided: " + (samples.size() - correct - wrong));
-        System.out.println(correct + "/" + samples.size() + " - " + (correct / (float) samples.size() * 100.0f) + "% accuracy");
+        System.out.println(correct + "/" + samples.size() + " - " + (correct / (float) samples.size() * 100.0f) + "% accuracy, " +  (correct / (float) (correct + wrong) * 100.0f) + "% accuracy (ignore undecided)");
     }
 }

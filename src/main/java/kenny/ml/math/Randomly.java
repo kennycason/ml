@@ -1,5 +1,6 @@
 package kenny.ml.math;
 
+import org.eclipse.collections.api.list.ListIterable;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.set.MutableSet;
 import org.eclipse.collections.impl.factory.Lists;
@@ -33,7 +34,7 @@ public class Randomly {
         return ThreadLocalRandom.current().nextInt(bound);
     }
 
-    public static <T> MutableList<T> sample(final MutableList<T> list, final int sampleSize) {
+    public static <T> ListIterable<T> sample(final ListIterable<T> list, final int sampleSize) {
         if (sampleSize > list.size()) {
             throw new IllegalArgumentException("Sample size is larger than list size");
         }

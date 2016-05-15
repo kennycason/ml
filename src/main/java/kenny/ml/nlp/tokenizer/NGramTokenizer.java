@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class NGramTokenizer {
 
-    public List<String> tokenizeCommulative(List<String> tokensList, int n) {
+    public List<String> tokenizeCumulative(List<String> tokensList, int n) {
         final List<String> tokens = new ArrayList<>();
         for (int i = 2; i <= n; i++) {
             tokens.addAll(tokenize(tokensList, i));

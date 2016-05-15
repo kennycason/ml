@@ -6,6 +6,7 @@ import kenny.ml.data.dictionary.FrequencyAwareWordDictionary;
 import kenny.ml.data.dictionary.WordFrequency;
 import kenny.ml.math.Randomly;
 import kenny.ml.nlp.tokenizer.LazyDelimeterBackedTokenizer;
+import org.eclipse.collections.api.list.ListIterable;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.set.MutableSet;
 import org.eclipse.collections.impl.factory.Sets;
@@ -38,7 +39,7 @@ public class Word2Vec {
         // construction are also the most frequent.
         final int validSize = 16;     // random set of words to evaluate similarity on.
         final int validWindow = 100;  // only pick dev samples in the head of the distribution.
-        final MutableList<WordFrequency> validExamples = Randomly.sample(words.subList(0, validWindow), validSize);
+        final ListIterable<WordFrequency> validExamples = Randomly.sample(words.subList(0, validWindow), validSize);
         final int numSampled = 64;    // number of negative examples to sample.
 
         final DoubleMatrix2D embeddings = DoubleFactory2D.dense

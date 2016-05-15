@@ -5,40 +5,42 @@ import kenny.ml.nlp.tokenizer.WhiteSpaceWordTokenizer;
 import kenny.ml.nlp.tokenizer.WordTokenizer;
 
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class NaiveBayesianFilter implements BayesianFilter {
+    private final Map<String, Word> words = new HashMap<>();
+
     private WordTokenizer wordTokenizer = new WhiteSpaceWordTokenizer();
     private List<Function<String, String>> tokenNormalizers = new ArrayList<>();
     private Set<String> stopWords = new HashSet<>();
-    private final Map<String, Word> words = new HashMap<>();
-
     private int nGrams = 1;
-    private boolean commulativeNGrams = false;
+    private boolean cumulativeNGrams;
+    private int interestingNGrams = 15;
 
-    private List<String> tokenize(String text, int nGrams) {
+    private List<String> tokenize(final String text, final int nGrams) {
         List<String> tokens = wordTokenizer.tokenize(text);
 
         tokens.removeAll(stopWords);
 
-        for(Function<String, String> filter : tokenNormalizers) {
+        for(final Function<String, String> filter : tokenNormalizers) {
             tokens = tokens.stream().map(filter).collect(Collectors.toList());
         }
         final NGramTokenizer nGramTokenizer = new NGramTokenizer();
-        if (commulativeNGrams) {
-            return nGramTokenizer.tokenizeCommulative(tokens, nGrams);
+        if (cumulativeNGrams) {
+            return nGramTokenizer.tokenizeCumulative(tokens, nGrams);
         }
         return nGramTokenizer.tokenize(tokens, nGrams);
     }
 
     @Override
-    public void trainNegative(String text) {
+    public void trainNegative(final String text) {
         final List<String> tokens = tokenize(text, nGrams);
         int spamTotal = 0; // How many words total
 
         // For every word token
-        for (String token : tokens) {
+        for (final String token : tokens) {
             spamTotal++;
             // If it exists in the HashMap already
             // Increment the count
@@ -55,18 +57,18 @@ public class NaiveBayesianFilter implements BayesianFilter {
 
         // Go through all the words and divide
         // by total words
-        for (Word word : words.values()) {
+        for (final Word word : words.values()) {
             word.calcNegativeProb(spamTotal);
         }
     }
 
     @Override
-    public void trainPositive(String text) {
+    public void trainPositive(final String text) {
         final List<String> tokens = tokenize(text, nGrams);
         int positiveTotal = 0; // How many words total
 
         // For every word token
-        for (String token : tokens) {
+        for (final String token : tokens) {
             positiveTotal++;
             // If it exists in the HashMap already
             // Increment the count
@@ -84,7 +86,7 @@ public class NaiveBayesianFilter implements BayesianFilter {
 
         // Go through all the words and divide
         // by total words
-        for (Word word : words.values()) {
+        for (final Word word : words.values()) {
             word.calcPositiveProb(positiveTotal, 2.0f);
         }
     }
@@ -94,16 +96,16 @@ public class NaiveBayesianFilter implements BayesianFilter {
      * http://www.paulgraham.com/spam.html
      */
     @Override
-    public float analyze(String text) {
+    public float analyze(final String text) {
         final List<String> tokens = tokenize(text, nGrams);
-        final List<Word> interesting = getInterestingWords(tokens, 15);
+        final List<Word> interesting = getInterestingWords(tokens, interestingNGrams);
 
-        // Apply Bayes' rule (via Graham)
+        // Apply Bayes' rule 
         float pposproduct = 1.0f;
         float pnegproduct = 1.0f;
         // For every word, multiply Spam probabilities ("Pneg") together
         // (As well as 1 - Pneg)
-        for (Word word : interesting) {
+        for (final Word word : interesting) {
             pposproduct *= word.getPNegative();
             pnegproduct *= (1.0f - word.getPNegative());
         }
@@ -122,22 +124,12 @@ public class NaiveBayesianFilter implements BayesianFilter {
      * @param limit
      * @return
      */
-    private List<Word> getInterestingWords(List<String> tokens, int limit) {
+    private List<Word> getInterestingWords(final List<String> tokens, final int limit) {
         final List<Word> interesting = new ArrayList<>();
 
         // For every word in the String to be analyzed
-
-        for (String token : tokens) {
-            Word word;
-
-            // If the String is in our HashMap get the word out
-            if (words.containsKey(token)) {
-                word = words.get(token);
-                // Otherwise, make a new word with a Bad probability of 0.5;
-            } else {
-                word = new Word(token);
-                word.setPNegative(0.4f);
-            }
+        for (final String token : tokens) {
+            final Word word = getWord(token);
 
             // If this list is empty, then add this word in!
             if (interesting.isEmpty()) {
@@ -160,7 +152,6 @@ public class NaiveBayesianFilter implements BayesianFilter {
                     }
                 }
             }
-
             // If the list is bigger than the limit, delete entries
             // at the end (the more "interesting" ones are at the
             // start of the list
@@ -171,42 +162,54 @@ public class NaiveBayesianFilter implements BayesianFilter {
         }
         return interesting;
     }
+    
+    private Word getWord(final String token) {
+        if (words.containsKey(token)) {
+            return words.get(token);
+        }
+        final Word word = new Word(token);
+        word.setPNegative(0.4f);
+        return word;   
+    }
 
     // For every word, calculate the probability of matching positive category
     @Override
     public void finalizeTraining() {
-        for(Word word : words.values()) {
-            word.finalizeProb();
-        }
+        words.values()
+             .forEach(Word::finalizeProb);
     }
 
-    public void setWordTokenizer(WordTokenizer wordTokenizer) {
-        wordTokenizer = wordTokenizer;
+    public void setWordTokenizer(final WordTokenizer wordTokenizer) {
+        this.wordTokenizer = wordTokenizer;
     }
 
-    public void setTokenNormalizers(List<Function<String, String>> tokenNormalizers) {
-        tokenNormalizers = tokenNormalizers;
+    public void setTokenNormalizers(final List<Function<String, String>> tokenNormalizers) {
+        this.tokenNormalizers = tokenNormalizers;
     }
 
     public void setnGrams(final int nGrams) {
         this.nGrams = nGrams;
     }
 
-    public void setCommulativeNGrams(boolean commulativeNGrams) {
-        this.commulativeNGrams = commulativeNGrams;
+    public void setCumulativeNGrams(final boolean cumulativeNGrams) {
+        this.cumulativeNGrams = cumulativeNGrams;
     }
 
-    public void setStopWords(Set<String> stopWords) {
-        stopWords = stopWords;
+    public void setStopWords(final Set<String> stopWords) {
+        this.stopWords = stopWords;
+    }
+
+    public void setInterestingNGrams(int interestingNGrams) {
+        this.interestingNGrams = interestingNGrams;
     }
 
     @Override
     public String toString() {
         final StringBuilder stringBuilder = new StringBuilder();
-        for(String key : words.keySet()) {
-            Word word = words.get(key);
+        for (final Entry<String, Word> stringWordEntry : words.entrySet()) {
+            final Word word = stringWordEntry.getValue();
             if (word != null) {
-                stringBuilder.append(key + " pBad: " + word.getPNegative() + " pGood: " + word.getPPositive());
+                stringBuilder.append(stringWordEntry.getKey() + " pBad: " + word.getPNegative() + " pGood: " + word.getPPositive());
             }
         }
         return stringBuilder.toString();
